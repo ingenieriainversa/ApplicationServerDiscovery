@@ -61,19 +61,31 @@ public class Main {
 		wasHome = null;
 		final String DEFAULT_FORMAT = "table";
 		outputFormat = DEFAULT_FORMAT;
-
+		
+		// New instance of HelpFormatter class
+		HelpFormatter formatter = new HelpFormatter();
+		
+		/* The formatter will skip sorting, and the arguments
+		 * will be printed in the same order they were added.
+		 */
+		formatter.setOptionComparator(null);
+		
 		// New instance of Options class
 		Options options = new Options();
 
 		// All options: name, alias, required and help text
-		options.addOption("h", "help", false, "Print help");
-		options.addOption("wasHome", true, "WAS installation path");
-		options.addOption("mode", true, "Output mode");
+		options.addOption("h", "help", false, "Print this help.");
+		options.addOption("wasHome", true, "This parameter is required. Use it to specify WAS installation path. For example:\n"
+									  + "</opt/IBM/WebSphere/AppServer>");
+		options.addOption("mode", true, "This parameter is required. Use it to specify the information to be printed. These are the options available:\n"
+									  + "<productData>   Print all product data.\n"
+									  + "<profileList>   Print a profile list and data.\n"
+									  + "<jvmList>       Print a JVM list and data.");
 
 		// Both options can not be displayed simultaneously.
 		OptionGroup group = new OptionGroup();
-		group.addOption(new Option("csv", "Output in CSV format"));
-		group.addOption(new Option("table", "Output in table format"));
+		group.addOption(new Option("csv", "This parameter is optional. Print output in CSV format."));
+		group.addOption(new Option("table", "This parameter is optional and set by default if you don't specify the ouput format. Print output in table format."));
 		options.addOptionGroup(group);
 
 		try {
@@ -82,20 +94,20 @@ public class Main {
 
 			// Option -h or --help
 			if (cmdLine.hasOption("h")) {
-				new HelpFormatter().printHelp(Main.class.getCanonicalName(), options);
+				formatter.printHelp(Main.class.getCanonicalName(), options);
 				return;
 			}
 
 			// Option -wasHome
 			wasHome = cmdLine.getOptionValue("wasHome");
 			if (wasHome == null) {
-				throw new org.apache.commons.cli.ParseException("wasHome option is required");
+				throw new org.apache.commons.cli.ParseException("wasHome option is required.");
 			}
 
 			// Option -mode
 			mode = cmdLine.getOptionValue("mode");
 			if (mode == null) {
-				throw new org.apache.commons.cli.ParseException("mode option is required");
+				throw new org.apache.commons.cli.ParseException("mode option is required.");
 			}
 
 			// Options -csv and -table for output format
@@ -107,10 +119,10 @@ public class Main {
 
 		} catch (org.apache.commons.cli.ParseException ex) {
 			System.out.println(ex.getMessage());
-			new HelpFormatter().printHelp(Main.class.getCanonicalName(), options);
+			formatter.printHelp(Main.class.getCanonicalName(), options);
 			System.exit(1);
 		} catch (java.lang.NumberFormatException ex) {
-			new HelpFormatter().printHelp(Main.class.getCanonicalName(), options);
+			formatter.printHelp(Main.class.getCanonicalName(), options);
 			System.exit(1);
 		}
 
