@@ -59,6 +59,8 @@ public class Main {
 		// Set required options to null
 		mode = null;
 		path = null;
+		
+		// Constant to set table as default value
 		final String DEFAULT_FORMAT = "table";
 		outputFormat = DEFAULT_FORMAT;
 
@@ -96,12 +98,16 @@ public class Main {
 
 		// New instance of Options class
 		Options options = new Options();
+		
+		// Add options to options object in order
 		options.addOption(opt_h);
 		options.addOption(opt_path);
 		options.addOption(opt_mode);
 
 		// New instance of OptionGroup class
 		OptionGroup group = new OptionGroup();
+		
+		// Add options to group object in order
 		group.addOption(opt_table);
 		group.addOption(opt_csv);
 		
@@ -118,10 +124,10 @@ public class Main {
 				return;
 			}
 
-			// Option -wasHome
+			// Option -path
 			path = cmdLine.getOptionValue("path");
 			if (path == null) {
-				throw new org.apache.commons.cli.ParseException("wasHome option is required.");
+				throw new org.apache.commons.cli.ParseException("path option is required.");
 			}
 
 			// Option -mode
@@ -148,15 +154,19 @@ public class Main {
 
 		// New instance of WasProductParser class
 		wasProduct = new WasProductParser();
+		
 		// Parse WAS.product file
 		wasProduct.parse(path);
+		
 		// Get WAS product data
 		wasProductData = wasProduct.getWasProduct();
 
 		// New instance of ProfileRegistryParser class
 		profileRegistryXml = new ProfileRegistryParser();
+		
 		// Parse profileRegistry.xml file
 		profileRegistryXml.parse(path);
+		
 		// Get Profiles ArrayList
 		profiles = profileRegistryXml.getProfiles();
 
