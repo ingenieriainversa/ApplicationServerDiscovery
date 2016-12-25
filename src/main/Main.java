@@ -49,7 +49,7 @@ public class Main {
 	private static ServerindexParser serverindexXml;
 	private static ArrayList<Jvm> jvms;
 	private static String mode;
-	private static String wasHome;
+	private static String path;
 	private static String outputFormat;
 	private static CommandLineParser parser;
 	private static CommandLine cmdLine;
@@ -58,34 +58,54 @@ public class Main {
 
 		// Set required options to null
 		mode = null;
-		wasHome = null;
+		path = null;
 		final String DEFAULT_FORMAT = "table";
 		outputFormat = DEFAULT_FORMAT;
-		
+
 		// New instance of HelpFormatter class
 		HelpFormatter formatter = new HelpFormatter();
-		
-		/* The formatter will skip sorting, and the arguments
-		 * will be printed in the same order they were added.
+
+		/*
+		 * The formatter will skip sorting, and the arguments will be printed in
+		 * the same order they were added.
 		 */
 		formatter.setOptionComparator(null);
-		
-		// New instance of Options class
-		Options options = new Options();
 
 		// All options: name, alias, required and help text
-		options.addOption("h", "help", false, "Print this help.");
-		options.addOption("wasHome", true, "This parameter is required. Use it to specify WAS installation path. For example:\n"
-									  + "</opt/IBM/WebSphere/AppServer>");
-		options.addOption("mode", true, "This parameter is required. Use it to specify the information to be printed. These are the options available:\n"
-									  + "<productData>   Print all product data.\n"
-									  + "<profileList>   Print a profile list and data.\n"
-									  + "<jvmList>       Print a JVM list and data.");
+		Option opt_h = Option.builder("h").longOpt("help").desc("Print this help.").build();
 
-		// Both options can not be displayed simultaneously.
+		Option opt_path = Option.builder("path")
+				.desc("This parameter is required. Use it to specify WAS, JBoss or WebLogic "
+						+ "installation path. For example:\n</opt/IBM/WebSphere/AppServer>")
+				.required().hasArg().argName("install_home").build();
+
+		Option opt_mode = Option.builder("mode")
+				.desc("This parameter is required. Use it to specify the information to be printed. "
+						+ "These are the arguments available for this option:\n"
+						+ "<productData>   Print all product data.\n"
+						+ "<profileList>   Print a profile list and data.\n"
+						+ "<jvmList>       Print a JVM list and data.")
+				.required().hasArg().argName("argument").build();
+
+		Option opt_csv = Option.builder("csv").desc("This parameter is optional. Print output in CSV format.").build();
+
+		Option opt_table = Option.builder("table")
+				.desc("This parameter is optional and set by default if you don't specify the "
+						+ "ouput format. Print output in table format.")
+				.build();
+
+		// New instance of Options class
+		Options options = new Options();
+		options.addOption(opt_h);
+		options.addOption(opt_path);
+		options.addOption(opt_mode);
+
+		// New instance of OptionGroup class
 		OptionGroup group = new OptionGroup();
-		group.addOption(new Option("csv", "This parameter is optional. Print output in CSV format."));
-		group.addOption(new Option("table", "This parameter is optional and set by default if you don't specify the ouput format. Print output in table format."));
+		group.addOption(opt_table);
+		group.addOption(opt_csv);
+		
+		// Both options can not be displayed simultaneously.
 		options.addOptionGroup(group);
 
 		try {
@@ -99,8 +119,8 @@ public class Main {
 			}
 
 			// Option -wasHome
-			wasHome = cmdLine.getOptionValue("wasHome");
-			if (wasHome == null) {
+			path = cmdLine.getOptionValue("path");
+			if (path == null) {
 				throw new org.apache.commons.cli.ParseException("wasHome option is required.");
 			}
 
@@ -129,14 +149,14 @@ public class Main {
 		// New instance of WasProductParser class
 		wasProduct = new WasProductParser();
 		// Parse WAS.product file
-		wasProduct.parse(wasHome);
+		wasProduct.parse(path);
 		// Get WAS product data
 		wasProductData = wasProduct.getWasProduct();
 
 		// New instance of ProfileRegistryParser class
 		profileRegistryXml = new ProfileRegistryParser();
 		// Parse profileRegistry.xml file
-		profileRegistryXml.parse(wasHome);
+		profileRegistryXml.parse(path);
 		// Get Profiles ArrayList
 		profiles = profileRegistryXml.getProfiles();
 
@@ -144,50 +164,50 @@ public class Main {
 		was = new Was(wasProductData, profiles);
 
 		if (mode.equals("productData")) {
-			
+
 			// Print all product data
 			was.printWasProductData(outputFormat);
-			
+
 		} else if (mode.equals("profileList")) {
-			
+
 			// Print a profile list
 			was.printProfileList(outputFormat);
-			
+
 		} else if (mode.equals("jvmList")) {
-			
+
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s\n",
-				"Hostname", "Profile", "Cell", "Node", "Server name", "Server type", "Apps count");
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", "Hostname", "Profile", "Cell", "Node", "Server name",
+						"Server type", "Apps count");
 			}
-			
+
 			int profileIndex = 0;
 			while (profileIndex < was.getProfiles().size()) {
-				
+
 				// Get the profile
 				Profile profile = was.getProfiles().get(profileIndex);
-				
+
 				// New instance of ServerindexParser class
 				serverindexXml = new ServerindexParser();
-				
+
 				// Get the serverindex.xml absolute path
 				String serverindexFile = profile.getServerindex();
-				
+
 				// Parse serverindex.xml file
 				serverindexXml.parse(serverindexFile);
-				
+
 				// Get Jvms ArrayList
 				jvms = serverindexXml.getJvms();
-				
+
 				// For each profile set the jvm ArrayList
 				profile.setJvms(jvms);
-				
+
 				// Print the jvm data list
-				 profile.printJvmList(outputFormat);
-				 
+				profile.printJvmList(outputFormat);
+
 				++profileIndex;
 			}
-			
+
 		}
 	}
 }
