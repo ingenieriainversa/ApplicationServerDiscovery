@@ -27,9 +27,12 @@ import java.util.ArrayList;
 public class Was {
 	private WasProduct wasProduct;
 	private ArrayList<Profile> profiles;
-	
-	/* Was class constructor:
+
+	/*
+	 * Was class constructor:
+	 * 
 	 * @wasProduct: WAS product data.
+	 * 
 	 * @profiles: WAS profiles ArrayList.
 	 */
 	public Was(WasProduct wasProduct, ArrayList<Profile> profiles) {
@@ -52,20 +55,20 @@ public class Was {
 	public void setProfiles(ArrayList<Profile> profiles) {
 		this.profiles = profiles;
 	}
-	
+
 	// Print Was product data
 	public void printWasProductData(String outputFormat) {
 		wasProduct.printWasData(outputFormat);
 	}
-	
+
 	// Print a profile name list
 	public void printProfileList(String outputFormat) {
-		
+
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n",
-			"Is a reservation ticket", "Default", "Name", "Path", "Template", "Cell", "Node", "Serverindex");
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Name", "Is a reservation ticket", "Default", "Path",
+					"Template", "Cell", "Node", "Serverindex");
 		}
-		
+
 		// Profiles array iteration
 		int index = 0;
 		while (index < profiles.size()) {

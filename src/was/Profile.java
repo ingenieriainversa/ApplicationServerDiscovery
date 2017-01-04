@@ -42,15 +42,21 @@ public class Profile {
 	private String serverindex;
 	private ArrayList<Jvm> jvms;
 
-	/* Jvm class constructor:
+	/*
+	 * Jvm class constructor:
+	 * 
 	 * @isAReservationTicket: Profile isAReservationTicket.
+	 * 
 	 * @isDefault: Profile isDefault.
+	 * 
 	 * @name: Profile name.
+	 * 
 	 * @path: Profile path.
+	 * 
 	 * @template: Profile template.
 	 */
-	public Profile(String isAReservationTicket, String isDefault, String name,
-			String path, String template) throws IOException {
+	public Profile(String isAReservationTicket, String isDefault, String name, String path, String template)
+			throws IOException {
 		setIsAReservationTicket(isAReservationTicket);
 		setIsDefault(isDefault);
 		setName(name);
@@ -131,8 +137,7 @@ public class Profile {
 	}
 
 	public void setServerindex(String path, String cell, String node) {
-		serverindex = path + "/config/cells/" + cell + "/nodes/" + node
-				+ "/serverindex.xml";
+		serverindex = path + "/config/cells/" + cell + "/nodes/" + node + "/serverindex.xml";
 	}
 
 	public ArrayList<Jvm> getJvms() {
@@ -145,19 +150,16 @@ public class Profile {
 
 	public void printProfileData(String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n",
-					getIsAReservationTicket(), getIsDefault(), getName(),
-					getPath(), getTemplate(), getCell(), getNode(),
-					getServerindex());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", getName(), getIsAReservationTicket(), getIsDefault(),
+					getPath(), getTemplate(), getCell(), getNode(), getServerindex());
 		} else if (outputFormat.equals("table")) {
 			String width = "%-25.25s";
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
-					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
-					+ "%s\n" + width + "%s\n\n", "Is a reservation ticket:",
-					getIsAReservationTicket(), "Default:", getIsDefault(),
-					"Name:", getName(), "Path:", getPath(), "Template:",
-					getTemplate(), "Cell:", getCell(), "Node:", getNode(),
-					"Serverindex:", getServerindex());
+			System.out.printf(
+					width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n"
+							+ width + "%s\n" + width + "%s\n\n",
+					"Name:", getName(), "Is a reservation ticket:", getIsAReservationTicket(), "Default:",
+					getIsDefault(), "Path:", getPath(), "Template:", getTemplate(), "Cell:", getCell(), "Node:",
+					getNode(), "Serverindex:", getServerindex());
 		}
 	}
 
@@ -175,17 +177,21 @@ public class Profile {
 		}
 	}
 
-	/* Method that prints a Jvm list filtered by endPointName:
+	/*
+	 * Method that prints a Jvm list filtered by endPointName:
+	 * 
 	 * @endPointName: The filter.
+	 * 
+	 * @outputFormat: Can be csv or table.
 	 */
-	public void printJvmListFilteredByEndPointName(String endPointName) {
+	public void printJvmEndPointsData(String endPointName, String outputFormat) {
 		// Jvms array iteration
 		int index = 0;
 		while (index < jvms.size()) {
 			Jvm jvm = jvms.get(index);
 
-			// For each Jvm print data
-			jvm.printEndPointsData(endPointName);
+			// For each Jvm print endPoints data
+			jvm.printEndPointsData(endPointName, outputFormat);
 
 			++index;
 		}

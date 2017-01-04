@@ -59,7 +59,7 @@ public class Main {
 		// Set required options to null
 		mode = null;
 		path = null;
-		
+
 		// Constant to set table as default value
 		final String DEFAULT_FORMAT = "table";
 		outputFormat = DEFAULT_FORMAT;
@@ -86,7 +86,8 @@ public class Main {
 						+ "These are the arguments available for this option:\n"
 						+ "<productData>   Print all product data.\n"
 						+ "<profileList>   Print a profile list and data.\n"
-						+ "<jvmList>       Print a JVM list and data.")
+						+ "<jvmList>       Print a JVM list and data.\n"
+						+ "<endPointList>  Print a end point list and data.")
 				.required().hasArg().argName("argument").build();
 
 		Option opt_csv = Option.builder("csv").desc("This parameter is optional. Print output in CSV format.").build();
@@ -98,7 +99,7 @@ public class Main {
 
 		// New instance of Options class
 		Options options = new Options();
-		
+
 		// Add options to options object in order
 		options.addOption(opt_h);
 		options.addOption(opt_path);
@@ -106,11 +107,11 @@ public class Main {
 
 		// New instance of OptionGroup class
 		OptionGroup group = new OptionGroup();
-		
+
 		// Add options to group object in order
 		group.addOption(opt_table);
 		group.addOption(opt_csv);
-		
+
 		// Both options can not be displayed simultaneously.
 		options.addOptionGroup(group);
 
@@ -154,19 +155,19 @@ public class Main {
 
 		// New instance of WasProductParser class
 		wasProduct = new WasProductParser();
-		
+
 		// Parse WAS.product file
 		wasProduct.parse(path);
-		
+
 		// Get WAS product data
 		wasProductData = wasProduct.getWasProduct();
 
 		// New instance of ProfileRegistryParser class
 		profileRegistryXml = new ProfileRegistryParser();
-		
+
 		// Parse profileRegistry.xml file
 		profileRegistryXml.parse(path);
-		
+
 		// Get Profiles ArrayList
 		profiles = profileRegistryXml.getProfiles();
 
@@ -191,6 +192,7 @@ public class Main {
 						"Server type", "Apps count");
 			}
 
+			// For each profile
 			int profileIndex = 0;
 			while (profileIndex < was.getProfiles().size()) {
 
@@ -209,7 +211,7 @@ public class Main {
 				// Get Jvms ArrayList
 				jvms = serverindexXml.getJvms();
 
-				// For each profile set the jvm ArrayList
+				// Set the jvm ArrayList
 				profile.setJvms(jvms);
 
 				// Print the jvm data list
@@ -218,6 +220,40 @@ public class Main {
 				++profileIndex;
 			}
 
+		} else if (mode.equals("endPointList")) {
+			// Print this header only if -csv option exist
+			if (cmdLine.hasOption("csv")) {
+				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server", "Server type", "Endpoint name",
+						"Endpoint hostname", "Port");
+			}
+
+			// For each profile
+			int profileIndex = 0;
+			while (profileIndex < was.getProfiles().size()) {
+
+				// Get the profile
+				Profile profile = was.getProfiles().get(profileIndex);
+
+				// New instance of ServerindexParser class
+				serverindexXml = new ServerindexParser();
+
+				// Get the serverindex.xml absolute path
+				String serverindexFile = profile.getServerindex();
+
+				// Parse serverindex.xml file
+				serverindexXml.parse(serverindexFile);
+
+				// Get Jvms ArrayList
+				jvms = serverindexXml.getJvms();
+
+				// Set the jvm ArrayList
+				profile.setJvms(jvms);
+
+				// Print the jvm data list
+				profile.printJvmEndPointsData("all", outputFormat);
+
+				++profileIndex;
+			}
 		}
 	}
 }

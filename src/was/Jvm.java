@@ -31,15 +31,22 @@ public class Jvm {
 	private ArrayList<EndPoint> endPoints;
 	private ArrayList<App> apps;
 	private int countApps;
-	
-	/* Jvm class constructor:
+
+	/*
+	 * Jvm class constructor:
+	 * 
 	 * @hostName: Jvm hostName.
+	 * 
 	 * @serverName: Jvm serverName.
+	 * 
 	 * @serverType: Jvm serverType.
+	 * 
 	 * @apps: Jvm apps array list.
+	 * 
 	 * @endPoints: Jvm endPoints array list.
 	 */
-	public Jvm(String hostName, String serverName, String serverType, ArrayList<App> apps, ArrayList<EndPoint> endPoints) {
+	public Jvm(String hostName, String serverName, String serverType, ArrayList<App> apps,
+			ArrayList<EndPoint> endPoints) {
 		setHostName(hostName);
 		setServerName(serverName);
 		setServerType(serverType);
@@ -47,98 +54,117 @@ public class Jvm {
 		setCountApps(apps);
 		setEndPoints(endPoints);
 	}
-	
+
 	public String getHostName() {
 		return hostName;
 	}
-	
+
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
 	}
-	
+
 	public String getServerName() {
 		return serverName;
 	}
-	
+
 	public void setServerName(String serverName) {
 		this.serverName = serverName;
 	}
-	
+
 	public String getServerType() {
 		return serverType;
 	}
-	
+
 	public void setServerType(String serverType) {
 		this.serverType = serverType;
 	}
-	
+
 	public ArrayList<App> getApps() {
 		return apps;
 	}
-	
+
 	public void setApps(ArrayList<App> apps) {
 		this.apps = apps;
 	}
-	
+
 	public int getCountApps() {
 		return countApps;
 	}
-	
+
 	public void setCountApps(ArrayList<App> apps) {
 		countApps = apps.size();
 	}
-	
+
 	public ArrayList<EndPoint> getEndPoints() {
 		return endPoints;
 	}
-	
+
 	public void setEndPoints(ArrayList<EndPoint> endPoints) {
 		this.endPoints = endPoints;
 	}
-	
+
 	public void printJvmData(String profile, String cell, String node, String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s\n",
-					getHostName(), profile, cell, node, getServerName(), getServerType(), getCountApps());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", getServerName(), getServerType(), getHostName(), profile, cell,
+					node, getCountApps());
 		} else if (outputFormat.equals("table")) {
 			String width = "%-13.13s";
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n" +
-			width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%d\n\n", 
-			"Hostname:", getHostName(), "Profile:", profile, "Cell:", cell, "Node:", node,
-			"Server name:", getServerName(), "Server type:", getServerType(), "Apps count:", getCountApps());
+			System.out.printf(
+					width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n"
+							+ width + "%d\n\n",
+					"Server name:", getServerName(), "Server type:", getServerType(), "Hostname:", getHostName(),
+					"Profile:", profile, "Cell:", cell, "Node:", node, "Apps count:", getCountApps());
 		}
 	}
-	
-	public void printEndPointsData(String endPointName) {
+
+	public void endPointData(String endPointData, String outputFormat) {
+
+		// Print the complete data line for endPoint
+		if (outputFormat.equals("csv")) {
+			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPointData);
+		} else if (outputFormat.equals("table")) {
+
+			// Fix this!
+			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPointData);
+		}
+	}
+
+	public void printEndPointsData(String endPointName, String outputFormat) {
+
 		// EndPoints array iteration
 		int index = 0;
-		while(index < getEndPoints().size()) {
+		while (index < getEndPoints().size()) {
 			EndPoint endPoint = getEndPoints().get(index);
-			
-			if(endPointName.isEmpty()) {
+
+			// Before "endPointName.isEmpty()"
+			if (endPointName.equals("all")) {
+
 				// Print jvm data without filter
-				System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPoint.printData());
-			} else if(endPoint.getEndPointName().equals(endPointName)){
+				endPointData(endPoint.printData(), outputFormat);
+
+			} else if (endPoint.getEndPointName().equals(endPointName)) {
+
 				// Print jvm data filtered by endPointName
-				System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPoint.printData());
+				endPointData(endPoint.printData(), outputFormat);
 			}
 			++index;
 		}
 	}
-	
+
 	public void printAppsData() {
 		// Apps array iteration
 		int appIndex = 0;
-		while(appIndex < getApps().size()) {
+		while (appIndex < getApps().size()) {
 			App app = getApps().get(appIndex);
-			
+
 			// EndPoints array iteration
 			int endPointIndex = 0;
-			while(endPointIndex < getEndPoints().size()) {
+			while (endPointIndex < getEndPoints().size()) {
 				EndPoint endPoint = getEndPoints().get(endPointIndex);
-				
+
 				// Print jvm data
-				System.out.printf("%s;%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPoint.printData(), app.getName());
+				System.out.printf("%s;%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(),
+						endPoint.printData(), app.getName());
 				++endPointIndex;
 			}
 			++appIndex;
