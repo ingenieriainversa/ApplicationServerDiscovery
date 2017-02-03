@@ -40,45 +40,55 @@ import org.xml.sax.SAXException;
 
 public class ProfileRegistryParser {
 	private static ArrayList<Profile> profiles;
-	
+
 	public void parse(String was_home) {
 		profiles = new ArrayList<Profile>();
-		
+
 		try {
 			// Create a new DocumentBuilder instance
-			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			
+			DocumentBuilder documentBuilder = DocumentBuilderFactory
+					.newInstance().newDocumentBuilder();
+
 			// Process the XML file and obtain the Document object
-			Document doc = documentBuilder.parse(new InputSource(new FileInputStream(was_home+"/properties/profileRegistry.xml")));
-			
+			Document doc = documentBuilder.parse(new InputSource(
+					new FileInputStream(was_home
+							+ "/properties/profileRegistry.xml")));
+
 			// Get profiles root node
 			Element profilesNode = doc.getDocumentElement();
-			
+
 			// profiles children nodes iteration
 			NodeList profilesChildNodes = profilesNode.getChildNodes();
 			for (int i = 0; i < profilesChildNodes.getLength(); i++) {
 				Node profile = profilesChildNodes.item(i);
 				if (profile instanceof Element) {
 					// Get isAReservationTicket attribute from profile node
-					String isAReservationTicket = profile.getAttributes().getNamedItem("isAReservationTicket").getTextContent();
-					
+					String isAReservationTicket = profile.getAttributes()
+							.getNamedItem("isAReservationTicket")
+							.getTextContent();
+
 					// Get isDefault attribute from profile node
-					String isDefault = profile.getAttributes().getNamedItem("isDefault").getTextContent();
-					
+					String isDefault = profile.getAttributes()
+							.getNamedItem("isDefault").getTextContent();
+
 					// Get name attribute from profile node
-					String name = profile.getAttributes().getNamedItem("name").getTextContent();
-					
+					String name = profile.getAttributes().getNamedItem("name")
+							.getTextContent();
+
 					// Get path attribute from profile node
-					String path = profile.getAttributes().getNamedItem("path").getTextContent();
-					
+					String path = profile.getAttributes().getNamedItem("path")
+							.getTextContent();
+
 					// Get template attribute from profile node
-					String template = profile.getAttributes().getNamedItem("template").getTextContent();
-					
+					String template = profile.getAttributes()
+							.getNamedItem("template").getTextContent();
+
 					// Add profile to ArrayList<Profile>
-					profiles.add(new Profile(isAReservationTicket, isDefault, name, path, template));
+					profiles.add(new Profile(isAReservationTicket, isDefault,
+							name, path, template));
 				}
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -89,7 +99,7 @@ public class ProfileRegistryParser {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ArrayList<Profile> getProfiles() {
 		return profiles;
 	}
