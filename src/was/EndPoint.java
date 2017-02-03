@@ -26,10 +26,14 @@ public class EndPoint {
 	private String endPointName;
 	private String host;
 	private String port;
-	
-	/* EndPoint class constructor:
+
+	/*
+	 * EndPoint class constructor:
+	 * 
 	 * @endPointName: EndPoint name.
+	 * 
 	 * @host: EndPoint host.
+	 * 
 	 * @port: EndPoint port.
 	 */
 	public EndPoint(String endPointName, String host, String port) {
@@ -37,32 +41,32 @@ public class EndPoint {
 		setHost(host);
 		setPort(port);
 	}
-	
+
 	public String getEndPointName() {
 		return endPointName;
 	}
-	
+
 	public void setEndPointName(String endPointName) {
 		this.endPointName = endPointName;
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
-	
+
 	public void setHost(String host) {
 		this.host = host;
 	}
-	
+
 	public String getPort() {
 		return port;
 	}
-	
+
 	public void setPort(String port) {
 		this.port = port;
 	}
-	
-	public String  printData() {
-		return getEndPointName()+";"+getHost()+";"+getPort();
+
+	public String printData() {
+		return getEndPointName() + ";" + getHost() + ";" + getPort();
 	}
 }
