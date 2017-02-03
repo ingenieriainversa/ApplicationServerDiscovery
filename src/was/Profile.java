@@ -37,8 +37,8 @@ public class Profile {
 	private String name;
 	private String path;
 	private String template;
-	private String cell;
-	private String node;
+	private String cell; // Class
+	private String node; // Class
 	private String serverindex;
 	private ArrayList<Jvm> jvms;
 
