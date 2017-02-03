@@ -42,86 +42,106 @@ public class ServerindexParser {
 	private static ArrayList<Jvm> jvms;
 	private static ArrayList<App> apps;
 	private static ArrayList<EndPoint> endPoints;
-	
+
 	public void parse(String serverindexFile) {
-		
+
 		jvms = new ArrayList<Jvm>();
-		
+
 		try {
-			
+
 			// Create a new DocumentBuilder instance
-			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			
+			DocumentBuilder documentBuilder = DocumentBuilderFactory
+					.newInstance().newDocumentBuilder();
+
 			// Process the XML file and obtain the Document object
-			Document doc = documentBuilder.parse(new InputSource(new FileInputStream(serverindexFile)));
+			Document doc = documentBuilder.parse(new InputSource(
+					new FileInputStream(serverindexFile)));
 
 			// Get serverindex root node
 			Element serverindexNode = doc.getDocumentElement();
-			
+
 			// Get hostName attribute from serverindex root node
-			String hostName = serverindexNode.getAttributes().getNamedItem("hostName").getTextContent();
-			
+			String hostName = serverindexNode.getAttributes()
+					.getNamedItem("hostName").getTextContent();
+
 			// serverindex children nodes iteration
 			NodeList serverindexChildNodes = serverindexNode.getChildNodes();
 			for (int a = 0; a < serverindexChildNodes.getLength(); a++) {
-				
+
 				endPoints = new ArrayList<EndPoint>();
 				apps = new ArrayList<App>();
-				
+
 				Node serverEntries = serverindexChildNodes.item(a);
 				if (serverEntries instanceof Element) {
-					
+
 					// Get serverName attribute from serverEntries node
-					String serverName = serverEntries.getAttributes().getNamedItem("serverName").getTextContent();
-					
+					String serverName = serverEntries.getAttributes()
+							.getNamedItem("serverName").getTextContent();
+
 					// Get serverType attribute from serverEntries node
-					String serverType = serverEntries.getAttributes().getNamedItem("serverType").getTextContent();
-					
+					String serverType = serverEntries.getAttributes()
+							.getNamedItem("serverType").getTextContent();
+
 					// serverEntries children nodes iteration
-					NodeList serverEntriesChildNodes = serverEntries.getChildNodes();
+					NodeList serverEntriesChildNodes = serverEntries
+							.getChildNodes();
 					for (int b = 0; b < serverEntriesChildNodes.getLength(); b++) {
-						
+
 						Node childNode = serverEntriesChildNodes.item(b);
 						if (childNode instanceof Element) {
-							
+
 							// Get child node name
 							String childNodeName = childNode.getNodeName();
-							
+
 							if (childNodeName.equals("deployedApplications")) {
-								
-								// Get text that deployedApplications node contains
-								String deployedApplication = childNode.getTextContent();
-								
+
+								// Get text that deployedApplications node
+								// contains
+								String deployedApplication = childNode
+										.getTextContent();
+
 								// Add app to ArrayList<App>
 								apps.add(new App(deployedApplication));
-								
+
 							} else if (childNodeName.equals("specialEndpoints")) {
-								
-								// Get endPointName attribute from specialEndpoints node
-								String endpointName = childNode.getAttributes().getNamedItem("endPointName").getTextContent();
-								
+
+								// Get endPointName attribute from
+								// specialEndpoints node
+								String endpointName = childNode.getAttributes()
+										.getNamedItem("endPointName")
+										.getTextContent();
+
 								// specialEndpoints children nodes iteration
-								NodeList specialEndpointsChildNodes = childNode.getChildNodes();
-								for (int c = 0; c < specialEndpointsChildNodes.getLength(); c++) {
-									Node endPoint = specialEndpointsChildNodes.item(c);
+								NodeList specialEndpointsChildNodes = childNode
+										.getChildNodes();
+								for (int c = 0; c < specialEndpointsChildNodes
+										.getLength(); c++) {
+									Node endPoint = specialEndpointsChildNodes
+											.item(c);
 									if (endPoint instanceof Element) {
-										
+
 										// Get host attribute from endPoint node
-										String host = endPoint.getAttributes().getNamedItem("host").getTextContent();
-										
+										String host = endPoint.getAttributes()
+												.getNamedItem("host")
+												.getTextContent();
+
 										// Get port attribute from endPoint node
-										String port = endPoint.getAttributes().getNamedItem("port").getTextContent();
-										
+										String port = endPoint.getAttributes()
+												.getNamedItem("port")
+												.getTextContent();
+
 										// Add endPoint to ArrayList<EndPoint>
-										endPoints.add(new EndPoint(endpointName, host, port));
+										endPoints.add(new EndPoint(
+												endpointName, host, port));
 									}
 								}
 							}
 						}
 					}
-					
+
 					// Add jvm to ArrayList<Jvm>
-					jvms.add(new Jvm(hostName, serverName, serverType, apps, endPoints));
+					jvms.add(new Jvm(hostName, serverName, serverType, apps,
+							endPoints));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -134,7 +154,7 @@ public class ServerindexParser {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public ArrayList<Jvm> getJvms() {
 		return jvms;
 	}
