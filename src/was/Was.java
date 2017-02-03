@@ -65,8 +65,9 @@ public class Was {
 	public void printProfileList(String outputFormat) {
 
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Name", "Is a reservation ticket", "Default", "Path",
-					"Template", "Cell", "Node", "Serverindex");
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Name",
+					"Is a reservation ticket", "Default", "Path", "Template",
+					"Cell", "Node", "Serverindex");
 		}
 
 		// Profiles array iteration
