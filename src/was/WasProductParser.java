@@ -43,62 +43,72 @@ public class WasProductParser {
 	private String version;
 	private String date;
 	private String level;
-	
+
 	public void parse(String was_home) {
 		try {
 			// Create a new DocumentBuilderFactory instance
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			
+
 			// Set to false load external DTD
-			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-			
-			// Create a new DocumentBuilder instance 
+			dbf.setFeature(
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+					false);
+
+			// Create a new DocumentBuilder instance
 			DocumentBuilder documentBuilder = dbf.newDocumentBuilder();
-			
+
 			// Process the XML file and obtain the Document object
-			Document doc = documentBuilder.parse(new InputSource(new FileInputStream(was_home+"/properties/version/WAS.product")));
-			
+			Document doc = documentBuilder.parse(new InputSource(
+					new FileInputStream(was_home
+							+ "/properties/version/WAS.product")));
+
 			// Get product root node
 			Element productNode = doc.getDocumentElement();
-			
+
 			// Get name attribute from product node
-			String name = productNode.getAttributes().getNamedItem("name").getTextContent();
-			
+			String name = productNode.getAttributes().getNamedItem("name")
+					.getTextContent();
+
 			// product children nodes iteration
 			NodeList productChildNodes = productNode.getChildNodes();
-			
+
 			for (int i = 0; i < productChildNodes.getLength(); i++) {
-				
+
 				Node productChildNode = productChildNodes.item(i);
-				
+
 				if (productChildNode instanceof Element) {
-					
+
 					// Get child node name
-					String productChildNodeName = productChildNode.getNodeName();
-					
+					String productChildNodeName = productChildNode
+							.getNodeName();
+
 					if (productChildNodeName.equals("id")) {
-						
+
 						// Get text that id node contains
 						id = productChildNode.getTextContent();
-						
-					} if (productChildNodeName.equals("version")) {
-						
+
+					}
+					if (productChildNodeName.equals("version")) {
+
 						// Get text that version node contains
 						version = productChildNode.getTextContent();
-						
-					} if (productChildNodeName.equals("build-info")) {
-						
-						// Get text that version node contains
-						date = productChildNode.getAttributes().getNamedItem("date").getTextContent();
-						
-						// Get text that version node contains
-						level = productChildNode.getAttributes().getNamedItem("level").getTextContent();
+
 					}
-					
+					if (productChildNodeName.equals("build-info")) {
+
+						// Get text that version node contains
+						date = productChildNode.getAttributes()
+								.getNamedItem("date").getTextContent();
+
+						// Get text that version node contains
+						level = productChildNode.getAttributes()
+								.getNamedItem("level").getTextContent();
+					}
+
 					wasProduct = new WasProduct(name, id, version, date, level);
 				}
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -109,7 +119,7 @@ public class WasProductParser {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public WasProduct getWasProduct() {
 		return wasProduct;
 	}
