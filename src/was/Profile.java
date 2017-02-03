@@ -35,10 +35,10 @@ public class Profile {
 	private String isAReservationTicket;
 	private String isDefault;
 	private String name;
-	private String path;
+	private String profilePath;
 	private String template;
-	private String cell; // Class
-	private String node; // Class
+	private Cell cell;
+	private Node node;
 	private String serverindex;
 	private ArrayList<Jvm> jvms;
 
@@ -51,27 +51,28 @@ public class Profile {
 	 * 
 	 * @name: Profile name.
 	 * 
-	 * @path: Profile path.
+	 * @profilePath: Profile path.
 	 * 
 	 * @template: Profile template.
 	 */
-	public Profile(String isAReservationTicket, String isDefault, String name, String path, String template)
-			throws IOException {
+	public Profile(String isAReservationTicket, String isDefault, String name,
+			String profilePath, String template) throws IOException {
 		setIsAReservationTicket(isAReservationTicket);
 		setIsDefault(isDefault);
 		setName(name);
-		setPath(path);
+		setProfilePath(profilePath);
 		setTemplate(template);
 
 		// Load properties file
-		propertiesFile.load(new FileInputStream(path + "/bin/setupCmdLine.sh"));
+		propertiesFile.load(new FileInputStream(profilePath
+				+ "/bin/setupCmdLine.sh"));
 
 		// Set atributtes with propertiesFile properties values
-		setCell(propertiesFile.getProperty("WAS_CELL"));
-		setNode(propertiesFile.getProperty("WAS_NODE"));
+		setCell(profilePath, propertiesFile.getProperty("WAS_CELL"));
+		setNode(profilePath, propertiesFile.getProperty("WAS_NODE"));
 
 		// Set serverindex attribute with serverindex.xml absolute path
-		setServerindex(path, cell, node);
+		setServerindex(cell, node);
 
 		setJvms(null);
 	}
@@ -100,12 +101,12 @@ public class Profile {
 		this.name = name;
 	}
 
-	public String getPath() {
-		return path;
+	public String getProfilePath() {
+		return profilePath;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setProfilePath(String profilePath) {
+		this.profilePath = profilePath;
 	}
 
 	public String getTemplate() {
@@ -116,28 +117,29 @@ public class Profile {
 		this.template = template;
 	}
 
-	public String getCell() {
+	public Cell getCell() {
 		return cell;
 	}
 
-	public void setCell(String cell) {
-		this.cell = cell;
+	public void setCell(String profilePath, String cell) {
+		this.cell = new Cell(profilePath, cell);
 	}
 
-	public String getNode() {
+	public Node getNode() {
 		return node;
 	}
 
-	public void setNode(String node) {
-		this.node = node;
+	public void setNode(String profilePath, String node) {
+		this.node = new Node(profilePath, cell, node);
 	}
 
 	public String getServerindex() {
 		return serverindex;
 	}
 
-	public void setServerindex(String path, String cell, String node) {
-		serverindex = path + "/config/cells/" + cell + "/nodes/" + node + "/serverindex.xml";
+	public void setServerindex(Cell cell, Node node) {
+		serverindex = getProfilePath() + "/config/cells/" + cell.getCellName()
+				+ "/nodes/" + node.getNodeName() + "/serverindex.xml";
 	}
 
 	public ArrayList<Jvm> getJvms() {
@@ -150,16 +152,20 @@ public class Profile {
 
 	public void printProfileData(String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", getName(), getIsAReservationTicket(), getIsDefault(),
-					getPath(), getTemplate(), getCell(), getNode(), getServerindex());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", getName(),
+					getIsAReservationTicket(), getIsDefault(),
+					getProfilePath(), getTemplate(), cell.getCellName(),
+					node.getNodeName(), getServerindex());
 		} else if (outputFormat.equals("table")) {
 			String width = "%-25.25s";
-			System.out.printf(
-					width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n"
-							+ width + "%s\n" + width + "%s\n\n",
-					"Name:", getName(), "Is a reservation ticket:", getIsAReservationTicket(), "Default:",
-					getIsDefault(), "Path:", getPath(), "Template:", getTemplate(), "Cell:", getCell(), "Node:",
-					getNode(), "Serverindex:", getServerindex());
+			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
+					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
+					+ "%s\n" + width + "%s\n\n", "Name:", getName(),
+					"Is a reservation ticket:", getIsAReservationTicket(),
+					"Default:", getIsDefault(), "Path:", getProfilePath(),
+					"Template:", getTemplate(), "Cell:", cell.getCellName(),
+					"Node:", node.getNodeName(), "Serverindex:",
+					getServerindex());
 		}
 	}
 
