@@ -45,8 +45,8 @@ public class Jvm {
 	 * 
 	 * @endPoints: Jvm endPoints array list.
 	 */
-	public Jvm(String hostName, String serverName, String serverType, ArrayList<App> apps,
-			ArrayList<EndPoint> endPoints) {
+	public Jvm(String hostName, String serverName, String serverType,
+			ArrayList<App> apps, ArrayList<EndPoint> endPoints) {
 		setHostName(hostName);
 		setServerName(serverName);
 		setServerType(serverType);
@@ -103,17 +103,21 @@ public class Jvm {
 		this.endPoints = endPoints;
 	}
 
-	public void printJvmData(String profile, String cell, String node, String outputFormat) {
+	public void printJvmData(String profile, Cell cell, Node node,
+			String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", getServerName(), getServerType(), getHostName(), profile, cell,
-					node, getCountApps());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", getServerName(),
+					getServerType(), getHostName(), profile,
+					cell.getCellName(), node.getNodeName(), getCountApps());
 		} else if (outputFormat.equals("table")) {
 			String width = "%-13.13s";
-			System.out.printf(
-					width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n" + width + "%s\n"
-							+ width + "%d\n\n",
-					"Server name:", getServerName(), "Server type:", getServerType(), "Hostname:", getHostName(),
-					"Profile:", profile, "Cell:", cell, "Node:", node, "Apps count:", getCountApps());
+			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
+					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
+					+ "%d\n\n", "Server name:", getServerName(),
+					"Server type:", getServerType(), "Hostname:",
+					getHostName(), "Profile:", profile, "Cell:",
+					cell.getCellName(), "Node:", node.getNodeName(),
+					"Apps count:", getCountApps());
 		}
 	}
 
@@ -121,11 +125,13 @@ public class Jvm {
 
 		// Print the complete data line for endPoint
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPointData);
+			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(),
+					getServerType(), endPointData);
 		} else if (outputFormat.equals("table")) {
 
 			// Fix this!
-			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(), endPointData);
+			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(),
+					getServerType(), endPointData);
 		}
 	}
 
@@ -163,8 +169,9 @@ public class Jvm {
 				EndPoint endPoint = getEndPoints().get(endPointIndex);
 
 				// Print jvm data
-				System.out.printf("%s;%s;%s;%s;%s\n", getHostName(), getServerName(), getServerType(),
-						endPoint.printData(), app.getName());
+				System.out.printf("%s;%s;%s;%s;%s\n", getHostName(),
+						getServerName(), getServerType(), endPoint.printData(),
+						app.getName());
 				++endPointIndex;
 			}
 			++appIndex;
