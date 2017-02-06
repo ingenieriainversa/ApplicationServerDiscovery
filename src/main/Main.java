@@ -29,6 +29,9 @@ import was.WasProductParser;
 import was.WasProduct;
 import was.Profile;
 import was.ProfileRegistryParser;
+import was.Resource;
+import was.ResourcesXmlParser;
+import was.Cell;
 import was.Jvm;
 import was.ServerindexParser;
 
@@ -47,7 +50,9 @@ public class Main {
 	private static ProfileRegistryParser profileRegistryXml;
 	private static ArrayList<Profile> profiles;
 	private static ServerindexParser serverindexXml;
+	private static ResourcesXmlParser resourcesXml;
 	private static ArrayList<Jvm> jvms;
+	private static ArrayList<Resource> resources;
 	private static String mode;
 	private static String path;
 	private static String outputFormat;
@@ -74,32 +79,26 @@ public class Main {
 		formatter.setOptionComparator(null);
 
 		// All options: name, alias, required and help text
-		Option opt_h = Option.builder("h").longOpt("help")
-				.desc("Print this help.").build();
+		Option opt_h = Option.builder("h").longOpt("help").desc("Print this help.").build();
 
-		Option opt_path = Option
-				.builder("path")
+		Option opt_path = Option.builder("path")
 				.desc("This parameter is required. Use it to specify WAS, JBoss or WebLogic "
 						+ "installation path. For example:\n</opt/IBM/WebSphere/AppServer>")
 				.required().hasArg().argName("install_home").build();
 
-		Option opt_mode = Option
-				.builder("mode")
+		Option opt_mode = Option.builder("mode")
 				.desc("This parameter is required. Use it to specify the information to be printed. "
 						+ "These are the arguments available for this option:\n"
-						+ "<productData>   Print all product data.\n"
-						+ "<profileList>   Print a profile list and data.\n"
-						+ "<jvmList>       Print a JVM list and data.\n"
-						+ "<endPointList>  Print a end point list and data.")
+						+ "<productData>    Print all product data.\n"
+						+ "<profileList>    Print a profile list and data.\n"
+						+ "<jvmList>        Print a JVM list and data.\n"
+						+ "<endPointList>   Print a end point list and data.\n"
+						+ "<resourcesList>  Print a resources list and data.")
 				.required().hasArg().argName("argument").build();
 
-		Option opt_csv = Option
-				.builder("csv")
-				.desc("This parameter is optional. Print output in CSV format.")
-				.build();
+		Option opt_csv = Option.builder("csv").desc("This parameter is optional. Print output in CSV format.").build();
 
-		Option opt_table = Option
-				.builder("table")
+		Option opt_table = Option.builder("table")
 				.desc("This parameter is optional and set by default if you don't specify the "
 						+ "ouput format. Print output in table format.")
 				.build();
@@ -135,15 +134,13 @@ public class Main {
 			// Option -path
 			path = cmdLine.getOptionValue("path");
 			if (path == null) {
-				throw new org.apache.commons.cli.ParseException(
-						"path option is required.");
+				throw new org.apache.commons.cli.ParseException("path option is required.");
 			}
 
 			// Option -mode
 			mode = cmdLine.getOptionValue("mode");
 			if (mode == null) {
-				throw new org.apache.commons.cli.ParseException(
-						"mode option is required.");
+				throw new org.apache.commons.cli.ParseException("mode option is required.");
 			}
 
 			// Options -csv and -table for output format
@@ -197,9 +194,8 @@ public class Main {
 
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", "Server name",
-						"Server type", "Hostname", "Profile", "Cell", "Node",
-						"Apps count");
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", "Server name", "Server type", "Hostname", "Profile", "Cell",
+						"Node", "Apps count");
 			}
 
 			// For each profile
@@ -233,9 +229,8 @@ public class Main {
 		} else if (mode.equals("endPointList")) {
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server",
-						"Server type", "Endpoint name", "Endpoint hostname",
-						"Port");
+				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server", "Server type", "Endpoint name",
+						"Endpoint hostname", "Port");
 			}
 
 			// For each profile
@@ -262,6 +257,49 @@ public class Main {
 
 				// Print the jvm data list
 				profile.printJvmEndPointsData("all", outputFormat);
+
+				++profileIndex;
+			}
+		} else if (mode.equals("resourcesList")) {
+			// Print this header only if -csv option exist
+			if (cmdLine.hasOption("csv")) {
+				System.out.printf("%s;%s\n", "Id", "Name");
+			}
+
+			// For each profile
+			int profileIndex = 0;
+			while (profileIndex < was.getProfiles().size()) {
+
+				// Get the profile
+				Profile profile = was.getProfiles().get(profileIndex);
+
+				// New instance of ResourcesXmlParser class
+				resourcesXml = new ResourcesXmlParser();
+				
+				// Get Cell from profile
+				Cell cell = profile.getCell();
+				
+				// Get the Cell resources.xml absolute path
+				String cellResourcesXmlFile = cell.getResourcesXml();
+
+				// Get the Node resources.xml absolute path
+				String nodeResourcesXmlFile = cell.getResourcesXml();
+
+				/*
+				 * Here the Server resources.xml.
+				 */
+
+				// Parse Cell serverindex.xml file
+				resourcesXml.parse(cellResourcesXmlFile);
+
+				// Get Jvms ArrayList
+				resources = resourcesXml.getResources();
+
+				// Set the jvm ArrayList
+				cell.setResources(resources);
+
+				// Print the jvm data list
+				cell.printResourcesData(outputFormat);
 
 				++profileIndex;
 			}

@@ -64,4 +64,30 @@ public class Cell {
 	public void setResourcesXml() {
 		resourcesXml = cellPath + "/resources.xml";
 	}
+
+	public ArrayList<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(ArrayList<Resource> resources) {
+		this.resources = resources;
+	}
+	
+	/*
+	 * Method that prints a Resources list:
+	 * 
+	 * @outputFormat: Can be csv or table.
+	 */
+	public void printResourcesData(String outputFormat) {
+		// Resources array iteration
+		int index = 0;
+		while (index < resources.size()) {
+			Resource resource = resources.get(index);
+
+			// For each Resource print data
+			resource.printResourceData(outputFormat);
+
+			++index;
+		}
+	}
 }

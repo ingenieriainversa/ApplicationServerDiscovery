@@ -169,7 +169,11 @@ public class Profile {
 		}
 	}
 
-	// Prints Jvm data list
+	/*
+	 * Method that prints a Jvm list:
+	 * 
+	 * @outputFormat: Can be csv or table.
+	 */
 	public void printJvmList(String outputFormat) {
 		// Jvms array iteration
 		int index = 0;

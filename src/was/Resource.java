@@ -26,29 +26,52 @@ import java.util.ArrayList;
 
 public class Resource {
 
-	private String resourceId;
-	private String resourceName;
+	private String id;
+	private String name;
 	private ArrayList<JDBCProvider> jdbcProviders;
 
-	public Resource(String resourceId, String resourceName) {
-		setResourceId(resourceId);
-		setResourceName(resourceName);
+	/*
+	 * Node class constructor:
+	 * 
+	 * @id: Resource id.
+	 * 
+	 * @name: Resource name.
+	 */
+	public Resource(String id, String name) {
+		setResourceId(id);
+		setResourceName(name);
 	}
 
-	public String getResourceId() {
-		return resourceId;
+	public String getId() {
+		return id;
 	}
 
-	public void setResourceId(String resourceId) {
-		this.resourceId = resourceId;
+	public void setResourceId(String id) {
+		this.id = id;
 	}
 
-	public String getResourceName() {
-		return resourceName;
+	public String getName() {
+		return name;
 	}
 
-	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName;
+	public void setResourceName(String name) {
+		this.name = name;
 	}
 
+	public ArrayList<JDBCProvider> getJdbcProviders() {
+		return jdbcProviders;
+	}
+
+	public void setJdbcProviders(ArrayList<JDBCProvider> jdbcProviders) {
+		this.jdbcProviders = jdbcProviders;
+	}
+
+	public void printResourceData(String outputFormat) {
+		if (outputFormat.equals("csv")) {
+			System.out.printf("%s;%s\n", getId(), getName());
+		} else if (outputFormat.equals("table")) {
+			String width = "%-13.13s";
+			System.out.printf(width + "%s\n" + width + "%d\n\n", "Id:", getId(), "Name:", getName());
+		}
+	}
 }
