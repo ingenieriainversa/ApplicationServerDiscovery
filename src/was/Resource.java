@@ -24,7 +24,7 @@ package was;
 
 import java.util.ArrayList;
 
-public class Resource {
+public abstract class Resource {
 
 	private String id;
 	private String name;
@@ -65,13 +65,6 @@ public class Resource {
 	public void setJdbcProviders(ArrayList<JDBCProvider> jdbcProviders) {
 		this.jdbcProviders = jdbcProviders;
 	}
-
-	public void printResourceData(String outputFormat) {
-		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s\n", getId(), getName());
-		} else if (outputFormat.equals("table")) {
-			String width = "%-13.13s";
-			System.out.printf(width + "%s\n" + width + "%d\n\n", "Id:", getId(), "Name:", getName());
-		}
-	}
+	
+	public abstract void printResourceData(String outputFormat);
 }

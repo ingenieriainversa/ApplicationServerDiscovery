@@ -282,22 +282,15 @@ public class Main {
 				// Get the Cell resources.xml absolute path
 				String cellResourcesXmlFile = cell.getResourcesXml();
 
-				// Get the Node resources.xml absolute path
-				String nodeResourcesXmlFile = cell.getResourcesXml();
-
-				/*
-				 * Here the Server resources.xml.
-				 */
-
 				// Parse Cell serverindex.xml file
 				resourcesXml.parse(cellResourcesXmlFile);
 
-				// Get Jvms ArrayList
+				// Get Resources ArrayList
 				resources = resourcesXml.getResources();
 
 				// Set the jvm ArrayList
 				cell.setResources(resources);
-
+				
 				// Print the jvm data list
 				cell.printResourcesData(outputFormat);
 

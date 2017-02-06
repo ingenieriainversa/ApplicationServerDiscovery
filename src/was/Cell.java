@@ -86,7 +86,7 @@ public class Cell {
 
 			// For each Resource print data
 			resource.printResourceData(outputFormat);
-
+			System.out.printf("\n");
 			++index;
 		}
 	}
