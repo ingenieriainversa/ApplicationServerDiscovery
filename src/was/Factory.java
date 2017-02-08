@@ -22,6 +22,8 @@
 
 package was;
 
+import java.util.ArrayList;
+
 public class Factory {
 
 	private String type;
@@ -38,6 +40,7 @@ public class Factory {
 	private String relationalResourceAdapter;
 	private String statementCacheSize;
 	private String datasourceHelperClassname;
+	private ArrayList<ResourceProperty> resourceProperties;
 
 	public Factory(String type, String id, String name, String jndiName,
 			String description, String providerType,
@@ -172,5 +175,23 @@ public class Factory {
 
 	public void setDatasourceHelperClassname(String datasourceHelperClassname) {
 		this.datasourceHelperClassname = datasourceHelperClassname;
+	}
+	
+	public ArrayList<ResourceProperty> getResourceProperties() {
+		return resourceProperties;
+	}
+	
+	public void setResourceProperties (ArrayList<ResourceProperty> resourceProperties) {
+		this.resourceProperties = resourceProperties;
+	}
+
+	public String toString() {
+		return type + ";" + id + ";" + name + ";" + jndiName + ";"
+				+ description + ";" + providerType + ";"
+				+ authMechanismPreference + ";" + authDataAlias + ";"
+				+ manageCachedHandles + ";" + logMissingTransactionContext
+				+ ";" + diagnoseConnectionUsage + ";"
+				+ relationalResourceAdapter + ";" + statementCacheSize + ";"
+				+ datasourceHelperClassname;
 	}
 }
