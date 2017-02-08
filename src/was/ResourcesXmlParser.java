@@ -51,10 +51,12 @@ public class ResourcesXmlParser {
 		try {
 
 			// Create a new DocumentBuilder instance
-			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilder documentBuilder = DocumentBuilderFactory
+					.newInstance().newDocumentBuilder();
 
 			// Process the XML file and obtain the Document object
-			Document doc = documentBuilder.parse(new InputSource(new FileInputStream(resourcesXmlFile)));
+			Document doc = documentBuilder.parse(new InputSource(
+					new FileInputStream(resourcesXmlFile)));
 
 			// Get serverindex root node
 			Element resourcesXmlNode = doc.getDocumentElement();
@@ -74,19 +76,22 @@ public class ResourcesXmlParser {
 					String resourcesNodeName = resourcesNode.getNodeName();
 
 					// Get id attribute from resources node
-					String id = resourcesNode.getAttributes().getNamedItem("xmi:id").getTextContent();
+					String id = resourcesNode.getAttributes()
+							.getNamedItem("xmi:id").getTextContent();
 
 					// Get name attribute from resources node
-					String name = resourcesNode.getAttributes().getNamedItem("name").getTextContent();
+					String name = resourcesNode.getAttributes()
+							.getNamedItem("name").getTextContent();
 
 					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
 
 						// Get description attribute from resources node
-						String description = resourcesNode.getAttributes().getNamedItem("description").getTextContent();
+						String description = resourcesNode.getAttributes()
+								.getNamedItem("description").getTextContent();
 
 						// Get providerType attribute from resources node
-						String providerType = resourcesNode.getAttributes().getNamedItem("providerType")
-								.getTextContent();
+						String providerType = resourcesNode.getAttributes()
+								.getNamedItem("providerType").getTextContent();
 
 						// // Get isolatedClassLoader attribute from resources
 						// node
@@ -97,26 +102,33 @@ public class ResourcesXmlParser {
 
 						// Get implementationClassName attribute from resources
 						// node
-						String implementationClassName = resourcesNode.getAttributes()
-								.getNamedItem("implementationClassName").getTextContent();
+						String implementationClassName = resourcesNode
+								.getAttributes()
+								.getNamedItem("implementationClassName")
+								.getTextContent();
 
 						// Get xa attribute from resources node
-						String xa = resourcesNode.getAttributes().getNamedItem("xa").getTextContent();
+						String xa = resourcesNode.getAttributes()
+								.getNamedItem("xa").getTextContent();
 
 						// resourcesNode children nodes iteration
-						NodeList resourcesChildNodes = resourcesNode.getChildNodes();
+						NodeList resourcesChildNodes = resourcesNode
+								.getChildNodes();
 						for (int b = 0; b < resourcesChildNodes.getLength(); b++) {
 
-							Node childNode = resourcesChildNodes.item(b);
-							if (childNode instanceof Element) {
+							Node resourcesChildNode = resourcesChildNodes
+									.item(b);
+							if (resourcesChildNode instanceof Element) {
 
 								// Get child node name
-								String childNodeName = childNode.getNodeName();
+								String childNodeName = resourcesChildNode
+										.getNodeName();
 
 								if (childNodeName.equals("classpath")) {
 
 									// Get text that classpath node contains
-									String classpath = childNode.getTextContent();
+									String classpath = resourcesChildNode
+											.getTextContent();
 
 									// Add classpath to ArrayList<String>
 									classpaths.add(new String(classpath));
@@ -124,7 +136,8 @@ public class ResourcesXmlParser {
 								} else if (childNodeName.equals("nativepath")) {
 
 									// Get text that nativeptah node contains
-									String nativeptah = childNode.getTextContent();
+									String nativeptah = resourcesChildNode
+											.getTextContent();
 
 									// Add nativeptah to ArrayList<String>
 									nativeptahs.add(new String(nativeptah));
@@ -133,123 +146,194 @@ public class ResourcesXmlParser {
 
 									// Get xmi:type attribute from factories
 									// node
-									String factoryType = childNode.getAttributes().getNamedItem("xmi:type")
+									String factoryType = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("xmi:type")
 											.getTextContent();
 
 									// Get xmi:id attribute from factories node
-									String factoryId = childNode.getAttributes().getNamedItem("xmi:id")
+									String factoryId = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("xmi:id")
 											.getTextContent();
 
 									// Get name attribute from factories node
-									String factoryName = childNode.getAttributes().getNamedItem("name")
+									String factoryName = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("name")
 											.getTextContent();
 
 									// Get jndiName attribute from factories
 									// node
-									String factoryJndiName = childNode.getAttributes().getNamedItem("jndiName")
+									String factoryJndiName = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("jndiName")
 											.getTextContent();
 
 									// Get description attribute from factories
 									// node
-									String factoryDescription = childNode.getAttributes().getNamedItem("description")
+									String factoryDescription = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("description")
 											.getTextContent();
 
 									// Get providerType attribute from factories
 									// node
-									String factoryProviderType = childNode.getAttributes().getNamedItem("providerType")
+									String factoryProviderType = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("providerType")
 											.getTextContent();
 
 									// Get authMechanismPreference attribute
 									// from factories node
-									String factoryAuthMechanismPreference = childNode.getAttributes()
-											.getNamedItem("authMechanismPreference").getTextContent();
+									String factoryAuthMechanismPreference = resourcesChildNode
+											.getAttributes()
+											.getNamedItem(
+													"authMechanismPreference")
+											.getTextContent();
 
 									// Get authDataAlias attribute from
 									// factories node
-									String factoryAuthDataAlias = childNode.getAttributes()
-											.getNamedItem("authDataAlias").getTextContent();
+									String factoryAuthDataAlias = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("authDataAlias")
+											.getTextContent();
 
 									// Get manageCachedHandles attribute from
 									// factories node
-									String factoryManageCachedHandles = childNode.getAttributes()
-											.getNamedItem("manageCachedHandles").getTextContent();
+									String factoryManageCachedHandles = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("manageCachedHandles")
+											.getTextContent();
 
 									// Get logMissingTransactionContext
 									// attribute from factories node
-									String factoryLogMissingTransactionContext = childNode.getAttributes()
-											.getNamedItem("logMissingTransactionContext").getTextContent();
+									String factoryLogMissingTransactionContext = resourcesChildNode
+											.getAttributes()
+											.getNamedItem(
+													"logMissingTransactionContext")
+											.getTextContent();
 
 									// Get diagnoseConnectionUsage attribute
 									// from factories node
-									String factoryDiagnoseConnectionUsage = childNode.getAttributes()
-											.getNamedItem("diagnoseConnectionUsage").getTextContent();
+									String factoryDiagnoseConnectionUsage = resourcesChildNode
+											.getAttributes()
+											.getNamedItem(
+													"diagnoseConnectionUsage")
+											.getTextContent();
 
 									// Get relationalResourceAdapter attribute
 									// from factories node
-									String factoryRelationalResourceAdapter = childNode.getAttributes()
-											.getNamedItem("relationalResourceAdapter").getTextContent();
+									String factoryRelationalResourceAdapter = resourcesChildNode
+											.getAttributes()
+											.getNamedItem(
+													"relationalResourceAdapter")
+											.getTextContent();
 
 									// Get statementCacheSize attribute from
 									// factories node
-									String factoryStatementCacheSize = childNode.getAttributes()
-											.getNamedItem("statementCacheSize").getTextContent();
+									String factoryStatementCacheSize = resourcesChildNode
+											.getAttributes()
+											.getNamedItem("statementCacheSize")
+											.getTextContent();
 
 									// Get datasourceHelperClassname attribute
 									// from factories node
-									String factoryDatasourceHelperClassname = childNode.getAttributes()
-											.getNamedItem("datasourceHelperClassname").getTextContent();
+									String factoryDatasourceHelperClassname = resourcesChildNode
+											.getAttributes()
+											.getNamedItem(
+													"datasourceHelperClassname")
+											.getTextContent();
+
+									// factories children nodes iteration
+									NodeList factoriesChildrenNodes = resourcesChildNode
+											.getChildNodes();
+									for (int c = 0; c < factoriesChildrenNodes
+											.getLength(); c++) {
+
+										Node factoriesChildNode = factoriesChildrenNodes
+												.item(c);
+										if (factoriesChildNode instanceof Element) {
+
+											// Get child node name
+											String factoriesChildNodeName = factoriesChildNode
+													.getNodeName();
+
+											if (factoriesChildNodeName
+													.equals("propertySet")) {
+												// propertySet children nodes iteration
+												NodeList propertySetChildrenNodes = factoriesChildNode
+														.getChildNodes();
+												for (int d = 0; d < propertySetChildrenNodes
+														.getLength(); d++) {
+													Node propertySetChildNode = propertySetChildrenNodes
+															.item(c);
+													if (propertySetChildNode instanceof Element) {
+														
+														// Get child node name
+														String propertySetNodeName = propertySetChildNode
+																.getNodeName();
+														
+														// Get xmi:id attribute from propertySet node
+														String propertyId = propertySetChildNode
+																.getAttributes()
+																.getNamedItem(
+																		"xmi:id")
+																.getTextContent();
+														
+														// Get name attribute from propertySet node
+														String propertyName = propertySetChildNode
+																.getAttributes()
+																.getNamedItem(
+																		"name")
+																.getTextContent();
+														
+														// Get type attribute from propertySet node
+														String propertyType = propertySetChildNode
+																.getAttributes()
+																.getNamedItem(
+																		"type")
+																.getTextContent();
+														
+														// Get value attribute from propertySet node
+														String propertyValue = propertySetChildNode
+																.getAttributes()
+																.getNamedItem(
+																		"value")
+																.getTextContent();
+													}
+												}
+											} else if (factoriesChildNodeName
+													.equals("connectionPool")) {
+
+											}
+										}
+									}
 
 									// Add factories to ArrayList<Factory>
-									factories.add(new Factory(factoryType, factoryId, factoryName, factoryJndiName,
-											factoryDescription, factoryProviderType, factoryAuthMechanismPreference,
-											factoryAuthDataAlias, factoryManageCachedHandles,
-											factoryLogMissingTransactionContext, factoryDiagnoseConnectionUsage,
-											factoryRelationalResourceAdapter, factoryStatementCacheSize,
-											factoryDatasourceHelperClassname));
+									factories
+											.add(new Factory(
+													factoryType,
+													factoryId,
+													factoryName,
+													factoryJndiName,
+													factoryDescription,
+													factoryProviderType,
+													factoryAuthMechanismPreference,
+													factoryAuthDataAlias,
+													factoryManageCachedHandles,
+													factoryLogMissingTransactionContext,
+													factoryDiagnoseConnectionUsage,
+													factoryRelationalResourceAdapter,
+													factoryStatementCacheSize,
+													factoryDatasourceHelperClassname));
 
-									// // specialEndpoints children nodes
-									// iteration
-									// NodeList specialEndpointsChildNodes =
-									// childNode
-									// .getChildNodes();
-									// for (int c = 0; c <
-									// specialEndpointsChildNodes
-									// .getLength(); c++) {
-									// Node endPoint =
-									// specialEndpointsChildNodes
-									// .item(c);
-									// if (endPoint instanceof Element) {
-									//
-									// // Get host attribute from endPoint
-									// // node
-									// String host = endPoint
-									// .getAttributes()
-									// .getNamedItem("host")
-									// .getTextContent();
-									//
-									// // Get port attribute from endPoint
-									// // node
-									// String port = endPoint
-									// .getAttributes()
-									// .getNamedItem("port")
-									// .getTextContent();
-									//
-									// // Add endPoint to
-									// // ArrayList<EndPoint>
-									// endPoints.add(new EndPoint(
-									// endpointName, host, port));
-									// }
-									// }
 								}
 							}
 						}
-						// Add JDBCProvider to ArrayList<Resource>
-						// resources.add(new JDBCProvider(id, name, description,
-						// providerType, isolatedClassLoader,
-						// implementationClassName, xa, classpaths,
-						// nativeptahs, factories));
 
-						resources.add(new JDBCProvider(id, name, description, providerType, implementationClassName, xa,
+						resources.add(new JDBCProvider(id, name, description,
+								providerType, implementationClassName, xa,
 								classpaths, nativeptahs, factories));
 					}
 				}
