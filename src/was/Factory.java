@@ -22,8 +22,6 @@
 
 package was;
 
-import java.util.ArrayList;
-
 public class Factory {
 
 	private String type;
@@ -40,14 +38,15 @@ public class Factory {
 	private String relationalResourceAdapter;
 	private String statementCacheSize;
 	private String datasourceHelperClassname;
-	private ArrayList<ResourceProperty> resourceProperties;
+	private String propertyURL;
 
 	public Factory(String type, String id, String name, String jndiName,
 			String description, String providerType,
 			String authMechanismPreference, String authDataAlias,
 			String manageCachedHandles, String logMissingTransactionContext,
 			String diagnoseConnectionUsage, String relationalResourceAdapter,
-			String statementCacheSize, String datasourceHelperClassname) {
+			String statementCacheSize, String datasourceHelperClassname,
+			String propertyURL) {
 		setType(type);
 		setId(id);
 		setName(name);
@@ -62,6 +61,7 @@ public class Factory {
 		setRelationalResourceAdapter(relationalResourceAdapter);
 		setStatementCacheSize(statementCacheSize);
 		setDatasourceHelperClassname(datasourceHelperClassname);
+		setPropertyURL(propertyURL);
 	}
 
 	public String getType() {
@@ -176,13 +176,13 @@ public class Factory {
 	public void setDatasourceHelperClassname(String datasourceHelperClassname) {
 		this.datasourceHelperClassname = datasourceHelperClassname;
 	}
-	
-	public ArrayList<ResourceProperty> getResourceProperties() {
-		return resourceProperties;
+
+	public String getPropertyURL() {
+		return propertyURL;
 	}
-	
-	public void setResourceProperties (ArrayList<ResourceProperty> resourceProperties) {
-		this.resourceProperties = resourceProperties;
+
+	public void setPropertyURL(String propertyURL) {
+		this.propertyURL = propertyURL;
 	}
 
 	public String toString() {
@@ -192,6 +192,6 @@ public class Factory {
 				+ manageCachedHandles + ";" + logMissingTransactionContext
 				+ ";" + diagnoseConnectionUsage + ";"
 				+ relationalResourceAdapter + ";" + statementCacheSize + ";"
-				+ datasourceHelperClassname;
+				+ datasourceHelperClassname + ";" + propertyURL;
 	}
 }
