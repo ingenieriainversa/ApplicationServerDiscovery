@@ -66,5 +66,5 @@ public abstract class Resource {
 		this.jdbcProviders = jdbcProviders;
 	}
 	
-	public abstract void printResourceData(String outputFormat);
+	public abstract void printResourceData(String profileName, String scope, String outputFormat);
 }
