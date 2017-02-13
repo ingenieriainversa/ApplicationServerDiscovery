@@ -22,10 +22,14 @@
 
 package was;
 
+import java.util.ArrayList;
+
 public class Node {
 	private String nodeName;
 	private String nodePath;
 	private String resourcesXml;
+	private String scope;
+	private ArrayList<Resource> resources;
 
 	/*
 	 * Node class constructor:
@@ -55,7 +59,7 @@ public class Node {
 	}
 
 	public void setNodePath(String profilePath, Cell cell) {
-		nodePath = profilePath + "/config/cells/" + cell.getCellName() + "nodes/"+ nodeName;
+		nodePath = profilePath + "/config/cells/" + cell.getCellName() + "/nodes/"+ nodeName;
 	}
 	
 	public String getResourcesXml() {
@@ -64,5 +68,38 @@ public class Node {
 
 	public void setResourcesXml() {
 		resourcesXml = nodePath +"/resources.xml";
+	}
+	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope() {
+		scope = "Node: "+ getNodeName();
+	}
+
+	public ArrayList<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(ArrayList<Resource> resources) {
+		this.resources = resources;
+	}
+	
+	/*
+	 * Method that prints a Resources list:
+	 * 
+	 * @outputFormat: Can be csv or table.
+	 */
+	public void printResourcesData(String profileName, String outputFormat) {
+		// Resources array iteration
+		int index = 0;
+		while (index < resources.size()) {
+			Resource resource = resources.get(index);
+
+			// For each Resource print data
+			resource.printResourceData(profileName, scope, outputFormat);
+			++index;
+		}
 	}
 }
