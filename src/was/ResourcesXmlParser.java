@@ -144,6 +144,8 @@ public class ResourcesXmlParser {
 
 								} else if (childNodeName.equals("factories")) {
 
+									String factoryPropertyURL = null;
+
 									// Get xmi:type attribute from factories
 									// node
 									String factoryType = resourcesChildNode
@@ -261,51 +263,42 @@ public class ResourcesXmlParser {
 
 											if (factoriesChildNodeName
 													.equals("propertySet")) {
-												// propertySet children nodes iteration
+												// propertySet children nodes
+												// iteration
 												NodeList propertySetChildrenNodes = factoriesChildNode
 														.getChildNodes();
 												for (int d = 0; d < propertySetChildrenNodes
 														.getLength(); d++) {
+
 													Node propertySetChildNode = propertySetChildrenNodes
-															.item(c);
+															.item(d);
 													if (propertySetChildNode instanceof Element) {
-														
-														// Get child node name
-														String propertySetNodeName = propertySetChildNode
-																.getNodeName();
-														
-														// Get xmi:id attribute from propertySet node
-														String propertyId = propertySetChildNode
-																.getAttributes()
-																.getNamedItem(
-																		"xmi:id")
-																.getTextContent();
-														
-														// Get name attribute from propertySet node
-														String propertyName = propertySetChildNode
+
+														// Get name attribute
+														// from propertySet node
+														String factoryPropertyName = propertySetChildNode
 																.getAttributes()
 																.getNamedItem(
 																		"name")
 																.getTextContent();
-														
-														// Get type attribute from propertySet node
-														String propertyType = propertySetChildNode
-																.getAttributes()
-																.getNamedItem(
-																		"type")
-																.getTextContent();
-														
-														// Get value attribute from propertySet node
-														String propertyValue = propertySetChildNode
-																.getAttributes()
-																.getNamedItem(
-																		"value")
-																.getTextContent();
+
+														if (factoryPropertyName
+																.equals("URL")) {
+															// Get value
+															// attribute
+															// from propertySet
+															// node
+															// ans set it
+															factoryPropertyURL = propertySetChildNode
+																	.getAttributes()
+																	.getNamedItem(
+																			"value")
+																	.getTextContent();
+														}
 													}
 												}
 											} else if (factoriesChildNodeName
 													.equals("connectionPool")) {
-
 											}
 										}
 									}
@@ -326,7 +319,8 @@ public class ResourcesXmlParser {
 													factoryDiagnoseConnectionUsage,
 													factoryRelationalResourceAdapter,
 													factoryStatementCacheSize,
-													factoryDatasourceHelperClassname));
+													factoryDatasourceHelperClassname,
+													factoryPropertyURL));
 
 								}
 							}
