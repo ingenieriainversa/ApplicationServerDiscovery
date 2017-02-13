@@ -24,6 +24,7 @@ package main;
 
 import java.util.ArrayList;
 
+import was.Node;
 import was.Was;
 import was.WasProductParser;
 import was.WasProduct;
@@ -314,7 +315,7 @@ public class Main {
 				// Parse Cell resources.xml file
 				resourcesXml.parse(cellResourcesXmlFile);
 
-				// Get Resources ArrayList
+				// Get Cell resources ArrayList
 				resources = resourcesXml.getResources();
 
 				// Set the Resources ArrayList
@@ -322,6 +323,26 @@ public class Main {
 
 				// Print the resources data list
 				cell.printResourcesData(profile.getName(), outputFormat);
+				
+				
+				
+				// Get Node from profile
+				Node node = profile.getNode();
+
+				// Get the Node resources.xml absolute path
+				String nodeResourcesXmlFile = node.getResourcesXml();
+
+				// Parse Node resources.xml file
+				resourcesXml.parse(nodeResourcesXmlFile);
+
+				// Get Node resources ArrayList
+				resources = resourcesXml.getResources();
+
+				// Set the Resources ArrayList
+				node.setResources(resources);
+
+				// Print the resources data list
+				node.printResourcesData(profile.getName(), outputFormat);
 
 				++profileIndex;
 			}
