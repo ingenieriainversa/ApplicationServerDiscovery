@@ -28,6 +28,7 @@ public class Cell {
 	private String cellName;
 	private String cellPath;
 	private String resourcesXml;
+	private String scope;
 	private ArrayList<Resource> resources;
 
 	/*
@@ -39,6 +40,7 @@ public class Cell {
 		setCellName(cellName);
 		setCellPath(profilePath);
 		setResourcesXml();
+		setScope();
 	}
 
 	public String getCellName() {
@@ -64,6 +66,14 @@ public class Cell {
 	public void setResourcesXml() {
 		resourcesXml = cellPath + "/resources.xml";
 	}
+	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope() {
+		scope = "Cell: "+ getCellName();
+	}
 
 	public ArrayList<Resource> getResources() {
 		return resources;
@@ -78,15 +88,14 @@ public class Cell {
 	 * 
 	 * @outputFormat: Can be csv or table.
 	 */
-	public void printResourcesData(String outputFormat) {
+	public void printResourcesData(String profileName, String outputFormat) {
 		// Resources array iteration
 		int index = 0;
 		while (index < resources.size()) {
 			Resource resource = resources.get(index);
 
 			// For each Resource print data
-			resource.printResourceData(outputFormat);
-			System.out.printf("\n");
+			resource.printResourceData(profileName, scope, outputFormat);
 			++index;
 		}
 	}
