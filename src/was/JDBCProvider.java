@@ -131,9 +131,15 @@ public class JDBCProvider extends Resource {
 		this.factories = factories;
 	}
 
+	public String toString() {
+		return getId() + ";" + getName() + ";" + description + ";"
+				+ providerType + ";" + isolatedClassLoader + ";"
+				+ implementationClassName + ";" + xa;
+	}
+
 	public void printData(String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s\n", getId(), getName());
+			System.out.printf("%s\n", toString());
 		} else if (outputFormat.equals("table")) {
 			String width = "%-13.13s";
 			System.out.printf(width + "%s\n" + width + "%s\n\n", "Id:",
@@ -146,77 +152,79 @@ public class JDBCProvider extends Resource {
 		int index = 0;
 		while (index < classpaths.size()) {
 			String classpath = classpaths.get(index);
-			
+
 			// For each ClassPath print data
 			if (outputFormat.equals("csv")) {
 				System.out.printf("%s", classpath);
 			} else if (outputFormat.equals("table")) {
 				if (index == 0) {
-					System.out.printf(width+"%s\n", "ClassPath:", classpath);
+					System.out.printf(width + "%s\n", "ClassPath:", classpath);
 				} else {
-					System.out.printf(width+"%s\n", "", classpath);
-				}
-			}
-			++index;
-		}
-	}
-	
-	public void printResourceNativePathData(String outputFormat) {
-		// NativePath array iteration
-		int index = 0;
-		while (index < nativeptahs.size()) {
-			String nativepath = nativeptahs.get(index);
-			
-			// For each NativePath print data
-			if (outputFormat.equals("csv")) {
-				System.out.printf("%s\n", nativepath);
-			} else if (outputFormat.equals("table")) {
-				
-				if (index == 0) {
-					System.out.printf(width+"%s\n", "NativePath:", nativepath);
-				} else {
-					System.out.printf(width+"%s\n", "", nativepath);
-				}
-			}
-			++index;
-		}
-	}
-	
-	public void printResourceFactoriesData(String outputFormat) {
-		// Factories array iteration
-		int index = 0;
-		while (index < factories.size()) {
-			Factory factory = factories.get(index);
-			
-			// For each Factory print data
-			if (outputFormat.equals("csv")) {
-				System.out.printf("%s\n", factory.getName());
-			} else if (outputFormat.equals("table")) {
-				
-				if (index == 0) {
-					System.out.printf(width+"%s\n", "Factory:", factory.getName());
-				} else {
-					System.out.printf(width+"%s\n", "", factory.getName());
+					System.out.printf(width + "%s\n", "", classpath);
 				}
 			}
 			++index;
 		}
 	}
 
+	public void printResourceNativePathData(String outputFormat) {
+		// NativePath array iteration
+		int index = 0;
+		while (index < nativeptahs.size()) {
+			String nativepath = nativeptahs.get(index);
+
+			// For each NativePath print data
+			if (outputFormat.equals("csv")) {
+				System.out.printf("%s\n", nativepath);
+			} else if (outputFormat.equals("table")) {
+
+				if (index == 0) {
+					System.out
+							.printf(width + "%s\n", "NativePath:", nativepath);
+				} else {
+					System.out.printf(width + "%s\n", "", nativepath);
+				}
+			}
+			++index;
+		}
+	}
+
+	public void printResourceFactoriesData(String profileName, String scope, String outputFormat) {
+		// Factories array iteration
+		int index = 0;
+		while (index < factories.size()) {
+			Factory factory = factories.get(index);
+
+			// For each Factory print data
+			if (outputFormat.equals("csv")) {
+				System.out.printf("%s;%s;%s;%s\n", profileName, scope, toString(), factory.toString());
+			} else if (outputFormat.equals("table")) {
+//				if (index == 0) {
+//					System.out.printf(width + "%s\n", "Factory:",
+//							factory.getName());
+//				} else {
+//					System.out.printf(width + "%s\n", "", factory.getName());
+//				}
+			}
+			++index;
+		}
+	}
+
 	@Override
-	public void printResourceData(String outputFormat) {
+	public void printResourceData(String profileName, String scope, String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s\n", getId(), getName());
+			printResourceFactoriesData(profileName, scope, outputFormat);
 		} else if (outputFormat.equals("table")) {
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
-					+ width + "%s\n" + width + "%s\n" + width + "%s\n",
-					"Id:", getId(), "Name:", getName(), "Description:",
-					getDescription(), "Provider type:", getProviderType(),
-					"Implementation Class Name", getImplementationClassName(),
-					"XA:", getXa());
-			printResourceClassPathData(outputFormat);
-			printResourceNativePathData(outputFormat);
-			printResourceFactoriesData(outputFormat);
+			// System.out.printf(width + "%s\n" + width + "%s\n" + width +
+			// "%s\n"
+			// + width + "%s\n" + width + "%s\n" + width + "%s\n",
+			// "Id:", getId(), "Name:", getName(), "Description:",
+			// getDescription(), "Provider type:", getProviderType(),
+			// "Implementation Class Name", getImplementationClassName(),
+			// "XA:", getXa());
+			// printResourceClassPathData(outputFormat);
+			// printResourceNativePathData(outputFormat);
+			// printResourceFactoriesData(outputFormat);
 		}
 	}
 
