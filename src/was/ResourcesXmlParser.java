@@ -31,8 +31,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -83,11 +85,19 @@ public class ResourcesXmlParser {
 					String name = resourcesNode.getAttributes()
 							.getNamedItem("name").getTextContent();
 
-					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
+					// Get description attribute from resources node
+					String description = null;
+					NamedNodeMap attrs = resourcesNode.getAttributes();
+					for (int i = 0; i < attrs.getLength(); i++) {
+						Attr attribute = (Attr) attrs.item(i);
+						if (attribute.getName().equals("description")) {
+							description = resourcesNode.getAttributes()
+									.getNamedItem("description")
+									.getTextContent();
+						}
+					}
 
-						// Get description attribute from resources node
-						String description = resourcesNode.getAttributes()
-								.getNamedItem("description").getTextContent();
+					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
 
 						// Get providerType attribute from resources node
 						String providerType = resourcesNode.getAttributes()
