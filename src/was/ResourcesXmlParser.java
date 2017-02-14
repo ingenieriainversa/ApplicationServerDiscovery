@@ -85,23 +85,32 @@ public class ResourcesXmlParser {
 					String name = resourcesNode.getAttributes()
 							.getNamedItem("name").getTextContent();
 
-					// Get description attribute from resources node
-					String description = null;
 					NamedNodeMap attrs = resourcesNode.getAttributes();
+
+					String description = null;
+					String providerType = null;
+					String xa = null;
+
 					for (int i = 0; i < attrs.getLength(); i++) {
 						Attr attribute = (Attr) attrs.item(i);
+
+						// Get description attribute from resources node
 						if (attribute.getName().equals("description")) {
-							description = resourcesNode.getAttributes()
-									.getNamedItem("description")
-									.getTextContent();
+							description = attribute.getValue();
+						}
+
+						// Get providerType attribute from resources node
+						if (attribute.getName().equals("providerType")) {
+							providerType = attribute.getValue();
+						}
+
+						// Get xa attribute from resources node
+						if (attribute.getName().equals("xa")) {
+							xa = attribute.getValue();
 						}
 					}
 
 					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
-
-						// Get providerType attribute from resources node
-						String providerType = resourcesNode.getAttributes()
-								.getNamedItem("providerType").getTextContent();
 
 						// // Get isolatedClassLoader attribute from resources
 						// node
@@ -116,10 +125,6 @@ public class ResourcesXmlParser {
 								.getAttributes()
 								.getNamedItem("implementationClassName")
 								.getTextContent();
-
-						// Get xa attribute from resources node
-						String xa = resourcesNode.getAttributes()
-								.getNamedItem("xa").getTextContent();
 
 						// resourcesNode children nodes iteration
 						NodeList resourcesChildNodes = resourcesNode
