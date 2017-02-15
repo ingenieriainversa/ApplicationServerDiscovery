@@ -85,14 +85,16 @@ public class ResourcesXmlParser {
 					String name = resourcesNode.getAttributes()
 							.getNamedItem("name").getTextContent();
 
-					NamedNodeMap attrs = resourcesNode.getAttributes();
+					NamedNodeMap resourcesNodeAttrs = resourcesNode
+							.getAttributes();
 
 					String description = null;
 					String providerType = null;
+					String isolatedClassLoader = null;
 					String xa = null;
 
-					for (int i = 0; i < attrs.getLength(); i++) {
-						Attr attribute = (Attr) attrs.item(i);
+					for (int i = 0; i < resourcesNodeAttrs.getLength(); i++) {
+						Attr attribute = (Attr) resourcesNodeAttrs.item(i);
 
 						// Get description attribute from resources node
 						if (attribute.getName().equals("description")) {
@@ -104,6 +106,12 @@ public class ResourcesXmlParser {
 							providerType = attribute.getValue();
 						}
 
+						// Get isolatedClassLoader attribute from resources
+						// node
+						if (attribute.getName().equals("isolatedClassLoader")) {
+							isolatedClassLoader = attribute.getValue();
+						}
+
 						// Get xa attribute from resources node
 						if (attribute.getName().equals("xa")) {
 							xa = attribute.getValue();
@@ -111,13 +119,6 @@ public class ResourcesXmlParser {
 					}
 
 					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
-
-						// // Get isolatedClassLoader attribute from resources
-						// node
-						// String isolatedClassLoader = resourcesNode
-						// .getAttributes()
-						// .getNamedItem("isolatedClassLoader")
-						// .getTextContent();
 
 						// Get implementationClassName attribute from resources
 						// node
@@ -134,6 +135,61 @@ public class ResourcesXmlParser {
 							Node resourcesChildNode = resourcesChildNodes
 									.item(b);
 							if (resourcesChildNode instanceof Element) {
+
+								NamedNodeMap resourcesChildNodeAttrs = resourcesChildNode
+										.getAttributes();
+
+								String factoryProviderType = null;
+								String factoryAuthDataAlias = null;
+								String factoryManageCachedHandles = null;
+								String factoryLogMissingTransactionContext = null;
+								String factoryDiagnoseConnectionUsage = null;
+
+								for (int i = 0; i < resourcesChildNodeAttrs
+										.getLength(); i++) {
+									Attr attribute = (Attr) resourcesChildNodeAttrs
+											.item(i);
+
+									// Get providerType attribute from factories
+									// node
+									if (attribute.getName().equals(
+											"providerType")) {
+										factoryProviderType = attribute
+												.getValue();
+									}
+
+									// Get authDataAlias attribute from
+									// factories node
+									if (attribute.getName().equals(
+											"authDataAlias")) {
+										factoryAuthDataAlias = attribute
+												.getValue();
+									}
+
+									// Get manageCachedHandles attribute from
+									// factories node
+									if (attribute.getName().equals(
+											"manageCachedHandles")) {
+										factoryManageCachedHandles = attribute
+												.getValue();
+									}
+
+									// Get logMissingTransactionContext
+									// attribute from factories node
+									if (attribute.getName().equals(
+											"logMissingTransactionContext")) {
+										factoryLogMissingTransactionContext = attribute
+												.getValue();
+									}
+
+									// Get diagnoseConnectionUsage attribute
+									// from factories node
+									if (attribute.getName().equals(
+											"diagnoseConnectionUsage")) {
+										factoryDiagnoseConnectionUsage = attribute
+												.getValue();
+									}
+								}
 
 								// Get child node name
 								String childNodeName = resourcesChildNode
@@ -194,49 +250,12 @@ public class ResourcesXmlParser {
 											.getNamedItem("description")
 											.getTextContent();
 
-									// Get providerType attribute from factories
-									// node
-									String factoryProviderType = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("providerType")
-											.getTextContent();
-
 									// Get authMechanismPreference attribute
 									// from factories node
 									String factoryAuthMechanismPreference = resourcesChildNode
 											.getAttributes()
 											.getNamedItem(
 													"authMechanismPreference")
-											.getTextContent();
-
-									// Get authDataAlias attribute from
-									// factories node
-									String factoryAuthDataAlias = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("authDataAlias")
-											.getTextContent();
-
-									// Get manageCachedHandles attribute from
-									// factories node
-									String factoryManageCachedHandles = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("manageCachedHandles")
-											.getTextContent();
-
-									// Get logMissingTransactionContext
-									// attribute from factories node
-									String factoryLogMissingTransactionContext = resourcesChildNode
-											.getAttributes()
-											.getNamedItem(
-													"logMissingTransactionContext")
-											.getTextContent();
-
-									// Get diagnoseConnectionUsage attribute
-									// from factories node
-									String factoryDiagnoseConnectionUsage = resourcesChildNode
-											.getAttributes()
-											.getNamedItem(
-													"diagnoseConnectionUsage")
 											.getTextContent();
 
 									// Get relationalResourceAdapter attribute
@@ -342,7 +361,7 @@ public class ResourcesXmlParser {
 						}
 
 						resources.add(new JDBCProvider(id, name, description,
-								providerType, implementationClassName, xa,
+								providerType, isolatedClassLoader, implementationClassName, xa,
 								classpaths, nativeptahs, factories));
 					}
 				}
