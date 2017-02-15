@@ -52,7 +52,8 @@ public class JDBCProvider extends Resource {
 	 * @xa: JDBC Provider connection type.
 	 */
 	public JDBCProvider(String id, String name, String description,
-			String providerType, String implementationClassName, String xa,
+			String providerType, String isolatedClassLoader,
+			String implementationClassName, String xa,
 			ArrayList<String> classpaths, ArrayList<String> nativeptahs,
 			ArrayList<Factory> factories) {
 		super(id, name);
@@ -60,6 +61,7 @@ public class JDBCProvider extends Resource {
 		setProviderType(providerType);
 		setIsolatedClassLoader(isolatedClassLoader);
 		setImplementationClassName(implementationClassName);
+
 		setXa(xa);
 		setClasspaths(classpaths);
 		setNativeptahs(nativeptahs);
@@ -189,7 +191,8 @@ public class JDBCProvider extends Resource {
 		}
 	}
 
-	public void printResourceFactoriesData(String profileName, String scope, String outputFormat) {
+	public void printResourceFactoriesData(String profileName, String scope,
+			String outputFormat) {
 		// Factories array iteration
 		int index = 0;
 		while (index < factories.size()) {
@@ -197,21 +200,23 @@ public class JDBCProvider extends Resource {
 
 			// For each Factory print data
 			if (outputFormat.equals("csv")) {
-				System.out.printf("%s;%s;%s;%s\n", profileName, scope, toString(), factory.toString());
+				System.out.printf("%s;%s;%s;%s\n", profileName, scope,
+						toString(), factory.toString());
 			} else if (outputFormat.equals("table")) {
-//				if (index == 0) {
-//					System.out.printf(width + "%s\n", "Factory:",
-//							factory.getName());
-//				} else {
-//					System.out.printf(width + "%s\n", "", factory.getName());
-//				}
+				// if (index == 0) {
+				// System.out.printf(width + "%s\n", "Factory:",
+				// factory.getName());
+				// } else {
+				// System.out.printf(width + "%s\n", "", factory.getName());
+				// }
 			}
 			++index;
 		}
 	}
 
 	@Override
-	public void printResourceData(String profileName, String scope, String outputFormat) {
+	public void printResourceData(String profileName, String scope,
+			String outputFormat) {
 		if (outputFormat.equals("csv")) {
 			printResourceFactoriesData(profileName, scope, outputFormat);
 		} else if (outputFormat.equals("table")) {
