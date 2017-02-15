@@ -44,6 +44,7 @@ public class Node {
 		setNodeName(nodeName);
 		setNodePath(profilePath, cell);
 		setResourcesXml();
+		setScope();
 	}
 
 	public String getNodeName() {
