@@ -28,6 +28,7 @@ public class Jvm {
 	private String hostName;
 	private String serverName;
 	private String serverType;
+	private Cluster cluster;
 	private ArrayList<EndPoint> endPoints;
 	private ArrayList<App> apps;
 	private int countApps;
@@ -77,6 +78,14 @@ public class Jvm {
 
 	public void setServerType(String serverType) {
 		this.serverType = serverType;
+	}
+	
+	public Cluster getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(Cluster cluster) {
+		this.cluster = cluster;
 	}
 
 	public ArrayList<App> getApps() {

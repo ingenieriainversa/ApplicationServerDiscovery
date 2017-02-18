@@ -30,6 +30,7 @@ public class Cell {
 	private String resourcesXml;
 	private String scope;
 	private ArrayList<Resource> resources;
+	private ArrayList<Cluster> clusters;
 
 	/*
 	 * Cell class constructor:
@@ -74,7 +75,15 @@ public class Cell {
 	public void setScope() {
 		scope = "Cell: "+ getCellName();
 	}
+	
+	public ArrayList<Cluster> getClusters() {
+		return clusters;
+	}
 
+	public void setClusters(ArrayList<Cluster> clusters) {
+		this.clusters = clusters;
+	}
+	
 	public ArrayList<Resource> getResources() {
 		return resources;
 	}
