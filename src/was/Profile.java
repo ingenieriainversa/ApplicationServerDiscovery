@@ -35,7 +35,7 @@ public class Profile {
 	private String isAReservationTicket;
 	private String isDefault;
 	private String name;
-	private String profilePath;
+	private String path;
 	private String template;
 	private Cell cell;
 	private Node node;
@@ -51,29 +51,31 @@ public class Profile {
 	 * 
 	 * @name: Profile name.
 	 * 
-	 * @profilePath: Profile path.
+	 * @path: Profile path.
 	 * 
 	 * @template: Profile template.
 	 */
 	public Profile(String isAReservationTicket, String isDefault, String name,
-			String profilePath, String template) throws IOException {
+			String path, String template) throws IOException {
+
 		setIsAReservationTicket(isAReservationTicket);
 		setIsDefault(isDefault);
 		setName(name);
-		setProfilePath(profilePath);
+		setPath(path);
 		setTemplate(template);
 
 		// Load properties file
-		propertiesFile.load(new FileInputStream(profilePath
+		propertiesFile.load(new FileInputStream(path
 				+ "/bin/setupCmdLine.sh"));
 
 		// Set atributtes with propertiesFile properties values
-		setCell(profilePath, propertiesFile.getProperty("WAS_CELL"));
-		setNode(profilePath, propertiesFile.getProperty("WAS_NODE"));
+		setCell(path, propertiesFile.getProperty("WAS_CELL"));
+		setNode(path, propertiesFile.getProperty("WAS_NODE"));
 
 		// Set serverindex attribute with serverindex.xml absolute path
 		setServerindex(cell, node);
 
+		// Initially set jvms ArrayList to null
 		setJvms(null);
 	}
 
@@ -101,12 +103,12 @@ public class Profile {
 		this.name = name;
 	}
 
-	public String getProfilePath() {
-		return profilePath;
+	public String getPath() {
+		return path;
 	}
 
-	public void setProfilePath(String profilePath) {
-		this.profilePath = profilePath;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public String getTemplate() {
@@ -122,7 +124,7 @@ public class Profile {
 	}
 
 	public void setCell(String profilePath, String cell) {
-		this.cell = new Cell(profilePath, cell);
+		this.cell = new Cell(cell, profilePath);
 	}
 
 	public Node getNode() {
@@ -138,8 +140,8 @@ public class Profile {
 	}
 
 	public void setServerindex(Cell cell, Node node) {
-		serverindex = getProfilePath() + "/config/cells/" + cell.getCellName()
-				+ "/nodes/" + node.getNodeName() + "/serverindex.xml";
+		serverindex = getPath() + "/config/cells/" + cell.getName()
+				+ "/nodes/" + node.getName() + "/serverindex.xml";
 	}
 
 	public ArrayList<Jvm> getJvms() {
@@ -150,22 +152,26 @@ public class Profile {
 		this.jvms = jvms;
 	}
 
+	public void setCellClusters() {
+		cell.setClusters(jvms);
+	}
+
 	public void printProfileData(String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", getName(),
-					getIsAReservationTicket(), getIsDefault(),
-					getProfilePath(), getTemplate(), cell.getCellName(),
-					node.getNodeName(), getServerindex());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", name,
+					isAReservationTicket, isDefault,
+					path, template, cell.getName(),
+					node.getName(), serverindex);
 		} else if (outputFormat.equals("table")) {
 			String width = "%-25.25s";
 			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
 					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
 					+ "%s\n" + width + "%s\n\n", "Name:", getName(),
-					"Is a reservation ticket:", getIsAReservationTicket(),
-					"Default:", getIsDefault(), "Path:", getProfilePath(),
-					"Template:", getTemplate(), "Cell:", cell.getCellName(),
-					"Node:", node.getNodeName(), "Serverindex:",
-					getServerindex());
+					"Is a reservation ticket:", isAReservationTicket,
+					"Default:", isDefault, "Path:", path,
+					"Template:", template, "Cell:", cell.getName(),
+					"Node:", node.getName(), "Serverindex:",
+					serverindex);
 		}
 	}
 

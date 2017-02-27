@@ -25,8 +25,8 @@ package was;
 import java.util.ArrayList;
 
 public class Cell {
-	private String cellName;
-	private String cellPath;
+	private String name;
+	private String path;
 	private String resourcesXml;
 	private String scope;
 	private ArrayList<Resource> resources;
@@ -35,29 +35,33 @@ public class Cell {
 	/*
 	 * Cell class constructor:
 	 * 
-	 * @cellName: Cell name.
+	 * @name: Cell name.
+	 * 
+	 * @path: Cell path.
 	 */
-	public Cell(String profilePath, String cellName) {
-		setCellName(cellName);
-		setCellPath(profilePath);
+	public Cell(String name, String profilePath) {
+		setName(name);
+		setPath(profilePath);
 		setResourcesXml();
 		setScope();
+
+		clusters = new ArrayList<Cluster>();
 	}
 
-	public String getCellName() {
-		return cellName;
+	public String getName() {
+		return name;
 	}
 
-	public void setCellName(String cellName) {
-		this.cellName = cellName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getCellPath() {
-		return cellPath;
+	public String getPath() {
+		return path;
 	}
 
-	public void setCellPath(String profilePath) {
-		cellPath = profilePath + "/config/cells/" + cellName;
+	public void setPath(String profilePath) {
+		path = profilePath + "/config/cells/" + name;
 	}
 
 	public String getResourcesXml() {
@@ -65,25 +69,39 @@ public class Cell {
 	}
 
 	public void setResourcesXml() {
-		resourcesXml = cellPath + "/resources.xml";
+		resourcesXml = path + "/resources.xml";
 	}
-	
+
 	public String getScope() {
 		return scope;
 	}
 
 	public void setScope() {
-		scope = "Cell: "+ getCellName();
+		scope = "Cell: " + name;
 	}
-	
+
 	public ArrayList<Cluster> getClusters() {
 		return clusters;
 	}
 
-	public void setClusters(ArrayList<Cluster> clusters) {
-		this.clusters = clusters;
+	public void setClusters(ArrayList<Jvm> jvms) {
+
+		// Jvms array iteration
+		int index = 0;
+		while (index < jvms.size()) {
+			Jvm jvm = jvms.get(index);
+
+			// Add cluster to ArrayList only if jvm is member of a cluster
+			if (jvm.isMemberOfCluster()) {
+				// For each Jvm get the cluster name and add to clusters
+				// ArrayList
+				clusters.add(new Cluster(jvm.getClusterName(), path, jvms));
+			}
+
+			++index;
+		}
 	}
-	
+
 	public ArrayList<Resource> getResources() {
 		return resources;
 	}
@@ -91,7 +109,7 @@ public class Cell {
 	public void setResources(ArrayList<Resource> resources) {
 		this.resources = resources;
 	}
-	
+
 	/*
 	 * Method that prints a Resources list:
 	 * 

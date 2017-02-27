@@ -24,6 +24,7 @@ package main;
 
 import java.util.ArrayList;
 
+import was.Cluster;
 import was.Node;
 import was.Was;
 import was.WasProductParser;
@@ -54,6 +55,7 @@ public class Main {
 	private static ResourcesXmlParser resourcesXml;
 	private static ArrayList<Jvm> jvms;
 	private static ArrayList<Resource> resources;
+	private static ArrayList<Cluster> clusters;
 	private static String mode;
 	private static String path;
 	private static String outputFormat;
@@ -204,9 +206,9 @@ public class Main {
 
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", "Server name",
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Server name",
 						"Server type", "Hostname", "Profile", "Cell", "Node",
-						"Apps count");
+						"Apps count", "Cluster name");
 			}
 
 			// For each profile
@@ -216,20 +218,8 @@ public class Main {
 				// Get the profile
 				Profile profile = was.getProfiles().get(profileIndex);
 
-				// New instance of ServerindexParser class
-				serverindexXml = new ServerindexParser();
-
-				// Get the serverindex.xml absolute path
-				String serverindexFile = profile.getServerindex();
-
-				// Parse serverindex.xml file
-				serverindexXml.parse(serverindexFile);
-
-				// Get Jvms ArrayList
-				jvms = serverindexXml.getJvms();
-
-				// Set the jvm ArrayList
-				profile.setJvms(jvms);
+				// Parse serverindex.xml and set de profile jvms
+				setProfileJvms(profile);
 
 				// Print the jvm data list
 				profile.printJvmList(outputFormat);
@@ -252,20 +242,8 @@ public class Main {
 				// Get the profile
 				Profile profile = was.getProfiles().get(profileIndex);
 
-				// New instance of ServerindexParser class
-				serverindexXml = new ServerindexParser();
-
-				// Get the serverindex.xml absolute path
-				String serverindexFile = profile.getServerindex();
-
-				// Parse serverindex.xml file
-				serverindexXml.parse(serverindexFile);
-
-				// Get Jvms ArrayList
-				jvms = serverindexXml.getJvms();
-
-				// Set the jvm ArrayList
-				profile.setJvms(jvms);
+				// Parse serverindex.xml and set de profile jvms
+				setProfileJvms(profile);
 
 				// Print the jvm data list
 				profile.printJvmEndPointsData("all", outputFormat);
@@ -305,7 +283,12 @@ public class Main {
 
 				// New instance of ResourcesXmlParser class
 				resourcesXml = new ResourcesXmlParser();
-
+				
+				
+				/*
+				 * Cell scope
+				 */
+				
 				// Get Cell from profile
 				Cell cell = profile.getCell();
 
@@ -325,6 +308,9 @@ public class Main {
 				cell.printResourcesData(profile.getName(), outputFormat);
 				
 				
+				/*
+				 * Node scope
+				 */
 				
 				// Get Node from profile
 				Node node = profile.getNode();
@@ -343,9 +329,98 @@ public class Main {
 
 				// Print the resources data list
 				node.printResourcesData(profile.getName(), outputFormat);
+				
+				
+				/*
+				 * Cluster scope
+				 */
+				
+				// Parse serverindex.xml and set de profile jvms
+				setProfileJvms(profile);
+
+				// Set clusters from Cell
+				profile.setCellClusters();
+
+				// Get clusters from Cell
+				clusters = cell.getClusters();
+
+				int clustersIndex = 0;
+				while (clustersIndex < clusters.size()) {
+
+					// Get the cluster from ArrayList
+					Cluster cluster = clusters.get(clustersIndex);
+
+					// Get the cluster resources.xml absolute path
+					String clusterResourcesXmlFile = cluster.getResourcesXml();
+
+					// Parse cluster resources.xml file
+					resourcesXml.parse(clusterResourcesXmlFile);
+
+					// Get cluster resources ArrayList
+					resources = resourcesXml.getResources();
+
+					// Set the Resources ArrayList
+					cluster.setResources(resources);
+
+					// Print the resources data list
+					cluster.printResourcesData(profile.getName(), outputFormat);
+
+					++clustersIndex;
+				}
+				
+				
+				/*
+				 * Server scope
+				 */
+
+				// Get jvms from profile
+				jvms = profile.getJvms();
+
+				int jvmsIndex = 0;
+				while (jvmsIndex < jvms.size()) {
+
+					// Get the Jvm from ArrayList
+					Jvm jvm = jvms.get(jvmsIndex);
+					
+					if(!jvm.getName().equals("nodeagent")) {
+						// Get the jvm resources.xml absolute path
+						String jvmResourcesXmlFile = jvm.getResourcesXml();
+	
+						// Parse jvm resources.xml file
+						resourcesXml.parse(jvmResourcesXmlFile);
+	
+						// Get jvm resources ArrayList
+						resources = resourcesXml.getResources();
+	
+						// Set the Resources ArrayList
+						jvm.setResources(resources);
+	
+						// Print the resources data list
+						jvm.printResourcesData(profile.getName(), outputFormat);
+					}
+
+					++jvmsIndex;
+				}
 
 				++profileIndex;
 			}
 		}
+	}
+
+	public static void setProfileJvms(Profile profile) {
+		// New instance of ServerindexParser class
+		serverindexXml = new ServerindexParser();
+
+		// Get the serverindex.xml absolute path
+		String serverindexFile = profile.getServerindex();
+
+		// Parse serverindex.xml file
+		serverindexXml.parse(serverindexFile, profile.getNode());
+
+		// Get Jvms ArrayList
+		jvms = serverindexXml.getJvms();
+
+		// Set the jvm ArrayList
+		profile.setJvms(jvms);
 	}
 }

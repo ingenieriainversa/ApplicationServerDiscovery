@@ -26,31 +26,46 @@ import java.util.ArrayList;
 
 public class Jvm {
 	private String hostName;
-	private String serverName;
-	private String serverType;
-	private Cluster cluster;
+	private String name;
+	private String path;
+	private String type;
+	private String serverXmlFile;
+	private String resourcesXml;
+	private ServerXmlParser serverXml;
+	private String scope;
+	private String clusterName;
+	private boolean memberOfCluster;
 	private ArrayList<EndPoint> endPoints;
 	private ArrayList<App> apps;
 	private int countApps;
+	private ArrayList<Resource> resources;
 
 	/*
 	 * Jvm class constructor:
 	 * 
 	 * @hostName: Jvm hostName.
 	 * 
-	 * @serverName: Jvm serverName.
+	 * @name: Jvm name.
 	 * 
-	 * @serverType: Jvm serverType.
+	 * @nodePath: Jvm node path
+	 * 
+	 * @type: Jvm type.
 	 * 
 	 * @apps: Jvm apps array list.
 	 * 
 	 * @endPoints: Jvm endPoints array list.
 	 */
-	public Jvm(String hostName, String serverName, String serverType,
+	public Jvm(String hostName, String name, String nodePath, String type,
 			ArrayList<App> apps, ArrayList<EndPoint> endPoints) {
 		setHostName(hostName);
-		setServerName(serverName);
-		setServerType(serverType);
+		setName(name);
+		setPath(nodePath);
+		setType(type);
+		setServerXmlFile(path);
+		setResourcesXml();
+		setScope();
+		setClusterName();
+		setMemberOfCluster();
 		setApps(apps);
 		setCountApps(apps);
 		setEndPoints(endPoints);
@@ -64,28 +79,86 @@ public class Jvm {
 		this.hostName = hostName;
 	}
 
-	public String getServerName() {
-		return serverName;
+	public String getName() {
+		return name;
 	}
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getServerType() {
-		return serverType;
+	public String getPath() {
+		return path;
 	}
 
-	public void setServerType(String serverType) {
-		this.serverType = serverType;
+	public void setPath(String nodePath) {
+		path = nodePath + "/servers/" + name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getServerXmlFile() {
+		return serverXmlFile;
+	}
+
+	public void setServerXmlFile(String serverPath) {
+		serverXmlFile = serverPath + "/server.xml";
 	}
 	
-	public Cluster getCluster() {
-		return cluster;
+	public String getResourcesXml() {
+		return resourcesXml;
 	}
 
-	public void setCluster(Cluster cluster) {
-		this.cluster = cluster;
+	public void setResourcesXml() {
+		if(!name.equals("nodeagent")) {
+			resourcesXml = path +"/resources.xml";
+		} else {
+			resourcesXml = null;
+		}
+	}
+
+	public String getClusterName() {
+		return clusterName;
+	}
+
+	public void setClusterName() {
+
+		// New instance of server.xml class
+		serverXml = new ServerXmlParser();
+
+		// Parse server.xml file
+		serverXml.parse(serverXmlFile);
+
+		// Set clusterName
+		clusterName = serverXml.getClusterName();
+	}
+	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope() {
+		scope = "Server: "+ getName();
+	}
+
+	public boolean isMemberOfCluster() {
+		return memberOfCluster;
+	}
+
+	public void setMemberOfCluster() {
+
+		// Set to true only if cluster name is not null
+		if (getClusterName() != null) {
+			memberOfCluster = true;
+		} else {
+			memberOfCluster = false;
+		}
 	}
 
 	public ArrayList<App> getApps() {
@@ -115,18 +188,17 @@ public class Jvm {
 	public void printJvmData(String profile, Cell cell, Node node,
 			String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s\n", getServerName(),
-					getServerType(), getHostName(), profile,
-					cell.getCellName(), node.getNodeName(), getCountApps());
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", name, type,
+					hostName, profile, cell.getName(), node.getName(),
+					countApps, clusterName);
 		} else if (outputFormat.equals("table")) {
 			String width = "%-13.13s";
 			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
 					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
-					+ "%d\n\n", "Server name:", getServerName(),
-					"Server type:", getServerType(), "Hostname:",
-					getHostName(), "Profile:", profile, "Cell:",
-					cell.getCellName(), "Node:", node.getNodeName(),
-					"Apps count:", getCountApps());
+					+ "%d\n\n", "Server name:", name, "Server type:", type,
+					"Hostname:", name, "Profile:", profile, "Cell:",
+					cell.getName(), "Node:", node.getName(), "Apps count:",
+					countApps);
 		}
 	}
 
@@ -134,13 +206,13 @@ public class Jvm {
 
 		// Print the complete data line for endPoint
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(),
-					getServerType(), endPointData);
+			System.out.printf("%s;%s;%s;%s\n", hostName, name, type,
+					endPointData);
 		} else if (outputFormat.equals("table")) {
 
 			// Fix this!
-			System.out.printf("%s;%s;%s;%s\n", getHostName(), getServerName(),
-					getServerType(), endPointData);
+			System.out.printf("%s;%s;%s;%s\n", hostName, name, type,
+					endPointData);
 		}
 	}
 
@@ -178,12 +250,32 @@ public class Jvm {
 				EndPoint endPoint = getEndPoints().get(endPointIndex);
 
 				// Print jvm data
-				System.out.printf("%s;%s;%s;%s;%s\n", getHostName(),
-						getServerName(), getServerType(), endPoint.printData(),
-						app.getName());
+				System.out.printf("%s;%s;%s;%s;%s\n", hostName, name, type,
+						endPoint.printData(), app.getName());
 				++endPointIndex;
 			}
 			++appIndex;
+		}
+	}
+	
+	public void setResources(ArrayList<Resource> resources) {
+		this.resources = resources;
+	}
+
+	/*
+	 * Method that prints a Resources list:
+	 * 
+	 * @outputFormat: Can be csv or table.
+	 */
+	public void printResourcesData(String profileName, String outputFormat) {
+		// Resources array iteration
+		int index = 0;
+		while (index < resources.size()) {
+			Resource resource = resources.get(index);
+
+			// For each Resource print data
+			resource.printResourceData(profileName, scope, outputFormat);
+			++index;
 		}
 	}
 }

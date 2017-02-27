@@ -43,7 +43,7 @@ public class ServerindexParser {
 	private static ArrayList<App> apps;
 	private static ArrayList<EndPoint> endPoints;
 
-	public void parse(String serverindexFile) {
+	public void parse(String serverindexFile, was.Node node) {
 
 		jvms = new ArrayList<Jvm>();
 
@@ -57,14 +57,14 @@ public class ServerindexParser {
 			Document doc = documentBuilder.parse(new InputSource(
 					new FileInputStream(serverindexFile)));
 
-			// Get serverindex root node
+			// Get serverindex.xml root node
 			Element serverindexNode = doc.getDocumentElement();
 
-			// Get hostName attribute from serverindex root node
+			// Get hostName attribute from serverindex.xml root node
 			String hostName = serverindexNode.getAttributes()
 					.getNamedItem("hostName").getTextContent();
 
-			// serverindex children nodes iteration
+			// serverindex.xml children nodes iteration
 			NodeList serverindexChildNodes = serverindexNode.getChildNodes();
 			for (int a = 0; a < serverindexChildNodes.getLength(); a++) {
 
@@ -140,7 +140,7 @@ public class ServerindexParser {
 					}
 
 					// Add jvm to ArrayList<Jvm>
-					jvms.add(new Jvm(hostName, serverName, serverType, apps,
+					jvms.add(new Jvm(hostName, serverName, node.getPath(), serverType, apps,
 							endPoints));
 				}
 			}

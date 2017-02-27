@@ -88,10 +88,10 @@ public class ResourcesXmlParser {
 					NamedNodeMap resourcesNodeAttrs = resourcesNode
 							.getAttributes();
 
-					String description = null;
-					String providerType = null;
-					String isolatedClassLoader = null;
-					String xa = null;
+					String description = "N/A";
+					String providerType = "N/A";
+					String isolatedClassLoader = "N/A";
+					String xa = "N/A";
 
 					for (int i = 0; i < resourcesNodeAttrs.getLength(); i++) {
 						Attr attribute = (Attr) resourcesNodeAttrs.item(i);
@@ -139,11 +139,11 @@ public class ResourcesXmlParser {
 								NamedNodeMap resourcesChildNodeAttrs = resourcesChildNode
 										.getAttributes();
 
-								String factoryProviderType = null;
-								String factoryAuthDataAlias = null;
-								String factoryManageCachedHandles = null;
-								String factoryLogMissingTransactionContext = null;
-								String factoryDiagnoseConnectionUsage = null;
+								String factoryProviderType = "N/A";
+								String factoryAuthDataAlias = "N/A";
+								String factoryManageCachedHandles = "N/A";
+								String factoryLogMissingTransactionContext = "N/A";
+								String factoryDiagnoseConnectionUsage = "N/A";
 
 								for (int i = 0; i < resourcesChildNodeAttrs
 										.getLength(); i++) {
@@ -215,7 +215,11 @@ public class ResourcesXmlParser {
 
 								} else if (childNodeName.equals("factories")) {
 
-									String factoryPropertyURL = null;
+									String factoryPropertyURL = "N/A";
+									String factoryPropertyDatabaseName = "N/A";
+									String factoryPropertyDriverType = "N/A";
+									String factoryPropertyServerName = "N/A";
+									String factoryPropertyPortNumber = "N/A";
 
 									// Get xmi:type attribute from factories
 									// node
@@ -361,8 +365,9 @@ public class ResourcesXmlParser {
 						}
 
 						resources.add(new JDBCProvider(id, name, description,
-								providerType, isolatedClassLoader, implementationClassName, xa,
-								classpaths, nativeptahs, factories));
+								providerType, isolatedClassLoader,
+								implementationClassName, xa, classpaths,
+								nativeptahs, factories));
 					}
 				}
 			}

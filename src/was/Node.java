@@ -25,8 +25,8 @@ package was;
 import java.util.ArrayList;
 
 public class Node {
-	private String nodeName;
-	private String nodePath;
+	private String name;
+	private String path;
 	private String resourcesXml;
 	private String scope;
 	private ArrayList<Resource> resources;
@@ -40,27 +40,27 @@ public class Node {
 	 * 
 	 * @nodeName: Node name.
 	 */
-	public Node(String profilePath, Cell cell, String nodeName) {
-		setNodeName(nodeName);
-		setNodePath(profilePath, cell);
+	public Node(String profilePath, Cell cell, String name) {
+		setName(name);
+		setPath(profilePath, cell);
 		setResourcesXml();
 		setScope();
 	}
 
-	public String getNodeName() {
-		return nodeName;
+	public String getName() {
+		return name;
 	}
 
-	public void setNodeName(String nodeName) {
-		this.nodeName = nodeName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public String getNodePath() {
-		return nodePath;
+	public String getPath() {
+		return path;
 	}
 
-	public void setNodePath(String profilePath, Cell cell) {
-		nodePath = profilePath + "/config/cells/" + cell.getCellName() + "/nodes/"+ nodeName;
+	public void setPath(String profilePath, Cell cell) {
+		path = profilePath + "/config/cells/" + cell.getName() + "/nodes/"+ name;
 	}
 	
 	public String getResourcesXml() {
@@ -68,7 +68,7 @@ public class Node {
 	}
 
 	public void setResourcesXml() {
-		resourcesXml = nodePath +"/resources.xml";
+		resourcesXml = path +"/resources.xml";
 	}
 	
 	public String getScope() {
@@ -76,7 +76,7 @@ public class Node {
 	}
 
 	public void setScope() {
-		scope = "Node: "+ getNodeName();
+		scope = "Node: "+ getName();
 	}
 
 	public ArrayList<Resource> getResources() {
