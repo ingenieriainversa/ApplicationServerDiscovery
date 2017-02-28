@@ -39,14 +39,17 @@ public class Factory {
 	private String statementCacheSize;
 	private String datasourceHelperClassname;
 	private String propertyURL;
+	private String propertyDatabaseName;
+	private String propertyDriverType;
+	private String propertyServerName;
+	private String propertyPortNumber;
 
-	public Factory(String type, String id, String name, String jndiName,
-			String description, String providerType,
-			String authMechanismPreference, String authDataAlias,
-			String manageCachedHandles, String logMissingTransactionContext,
-			String diagnoseConnectionUsage, String relationalResourceAdapter,
-			String statementCacheSize, String datasourceHelperClassname,
-			String propertyURL) {
+	public Factory(String type, String id, String name, String jndiName, String description, String providerType,
+			String authMechanismPreference, String authDataAlias, String manageCachedHandles,
+			String logMissingTransactionContext, String diagnoseConnectionUsage, String relationalResourceAdapter,
+			String statementCacheSize, String datasourceHelperClassname, String propertyURL,
+			String propertyDatabaseName, String propertyDriverType, String propertyServerName,
+			String propertyPortNumber) {
 		setType(type);
 		setId(id);
 		setName(name);
@@ -62,6 +65,10 @@ public class Factory {
 		setStatementCacheSize(statementCacheSize);
 		setDatasourceHelperClassname(datasourceHelperClassname);
 		setPropertyURL(propertyURL);
+		setPropertyDatabaseName(propertyDatabaseName);
+		setPropertyDriverType(propertyDriverType);
+		setPropertyServerName(propertyServerName);
+		setPropertyPortNumber(propertyPortNumber);
 	}
 
 	public String getType() {
@@ -140,8 +147,7 @@ public class Factory {
 		return logMissingTransactionContext;
 	}
 
-	public void setLogMissingTransactionContext(
-			String logMissingTransactionContext) {
+	public void setLogMissingTransactionContext(String logMissingTransactionContext) {
 		this.logMissingTransactionContext = logMissingTransactionContext;
 	}
 
@@ -185,13 +191,43 @@ public class Factory {
 		this.propertyURL = propertyURL;
 	}
 
+	public String getPropertyDatabaseName() {
+		return propertyDatabaseName;
+	}
+
+	public void setPropertyDatabaseName(String propertyDatabaseName) {
+		this.propertyDatabaseName = propertyDatabaseName;
+	}
+
+	public String getPropertyDriverType() {
+		return propertyDriverType;
+	}
+
+	public void setPropertyDriverType(String propertyDriverType) {
+		this.propertyDriverType = propertyDriverType;
+	}
+
+	public String getPropertyServerName() {
+		return propertyServerName;
+	}
+
+	public void setPropertyServerName(String propertyServerName) {
+		this.propertyServerName = propertyServerName;
+	}
+
+	public String getPropertyPortNumber() {
+		return propertyPortNumber;
+	}
+
+	public void setPropertyPortNumber(String propertyPortNumber) {
+		this.propertyPortNumber = propertyPortNumber;
+	}
+
 	public String toString() {
-		return type + ";" + id + ";" + name + ";" + jndiName + ";"
-				+ description + ";" + providerType + ";"
-				+ authMechanismPreference + ";" + authDataAlias + ";"
-				+ manageCachedHandles + ";" + logMissingTransactionContext
-				+ ";" + diagnoseConnectionUsage + ";"
-				+ relationalResourceAdapter + ";" + statementCacheSize + ";"
-				+ datasourceHelperClassname + ";" + propertyURL;
+		return type + ";" + id + ";" + name + ";" + jndiName + ";" + description + ";" + providerType + ";"
+				+ authMechanismPreference + ";" + authDataAlias + ";" + manageCachedHandles + ";"
+				+ logMissingTransactionContext + ";" + diagnoseConnectionUsage + ";" + relationalResourceAdapter + ";"
+				+ statementCacheSize + ";" + datasourceHelperClassname + ";" + propertyURL + ";" + propertyDatabaseName
+				+ ";" + propertyDriverType + ";" + propertyDatabaseName + ";" + propertyPortNumber;
 	}
 }
