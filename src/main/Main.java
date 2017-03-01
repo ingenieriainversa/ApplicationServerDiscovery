@@ -82,14 +82,17 @@ public class Main {
 		formatter.setOptionComparator(null);
 
 		// All options: name, alias, required and help text
-		Option opt_h = Option.builder("h").longOpt("help").desc("Print this help.").build();
+		Option opt_h = Option.builder("h").longOpt("help")
+				.desc("Print this help.").build();
 
-		Option opt_path = Option.builder("path")
+		Option opt_path = Option
+				.builder("path")
 				.desc("This parameter is required. Use it to specify WAS, JBoss or WebLogic "
 						+ "installation path. For example:\n</opt/IBM/WebSphere/AppServer>")
 				.required().hasArg().argName("install_home").build();
 
-		Option opt_mode = Option.builder("mode")
+		Option opt_mode = Option
+				.builder("mode")
 				.desc("This parameter is required. Use it to specify the information to be printed. "
 						+ "These are the arguments available for this option:\n"
 						+ "<productData>    Print all product data.\n"
@@ -99,9 +102,13 @@ public class Main {
 						+ "<resourcesList>  Print a resources list and data.")
 				.required().hasArg().argName("argument").build();
 
-		Option opt_csv = Option.builder("csv").desc("This parameter is optional. Print output in CSV format.").build();
+		Option opt_csv = Option
+				.builder("csv")
+				.desc("This parameter is optional. Print output in CSV format.")
+				.build();
 
-		Option opt_table = Option.builder("table")
+		Option opt_table = Option
+				.builder("table")
 				.desc("This parameter is optional and set by default if you don't specify the "
 						+ "ouput format. Print output in table format.")
 				.build();
@@ -137,13 +144,15 @@ public class Main {
 			// Option -path
 			path = cmdLine.getOptionValue("path");
 			if (path == null) {
-				throw new org.apache.commons.cli.ParseException("path option is required.");
+				throw new org.apache.commons.cli.ParseException(
+						"path option is required.");
 			}
 
 			// Option -mode
 			mode = cmdLine.getOptionValue("mode");
 			if (mode == null) {
-				throw new org.apache.commons.cli.ParseException("mode option is required.");
+				throw new org.apache.commons.cli.ParseException(
+						"mode option is required.");
 			}
 
 			// Options -csv and -table for output format
@@ -197,8 +206,9 @@ public class Main {
 
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Server name", "Server type", "Hostname", "Profile",
-						"Cell", "Node", "Apps count", "Cluster name");
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Server name",
+						"Server type", "Hostname", "Profile", "Cell", "Node",
+						"Apps count", "Cluster name");
 			}
 
 			// For each profile
@@ -220,8 +230,9 @@ public class Main {
 		} else if (mode.equals("endPointList")) {
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server", "Server type", "Endpoint name",
-						"Endpoint hostname", "Port");
+				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server",
+						"Server type", "Endpoint name", "Endpoint hostname",
+						"Port");
 			}
 
 			// For each profile
@@ -242,15 +253,39 @@ public class Main {
 		} else if (mode.equals("resourcesList")) {
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-						"Profile", "Scope", "JDBC Provider id", "JDBC Provider name", "JDBC Provider description",
-						"JDBC Provider type", "JDBC Provider isolated class loader",
-						"JDBC Provider implementation class name", "XA", "Factory type", "Factory id", "Factory name",
-						"Factory JNDI Name", "Factory Description", "Factory Provider type",
-						"Factory auth mechanism preference", "Factory auth data alias", "Factory manage cached handles",
-						"Factory log missing transaction context", "Factory diagnose connection usage",
-						"Factory relational resource adapter", "Factory statement cache size",
-						"Factory datasource helper classname", "URL", "Database name", "Driver type", "Server name", "Port number");
+				System.out
+						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+								"Profile", "Scope", "JDBC Provider id",
+								"JDBC Provider name",
+								"JDBC Provider description",
+								"JDBC Provider type",
+								"JDBC Provider isolated class loader",
+								"JDBC Provider implementation class name",
+								"XA", "Factory type", "Factory id",
+								"Factory name", "Factory JNDI Name",
+								"Factory Description", "Factory Provider type",
+								"Factory auth mechanism preference",
+								"Factory auth data alias",
+								"Factory manage cached handles",
+								"Factory log missing transaction context",
+								"Factory diagnose connection usage",
+								"Factory relational resource adapter",
+								"Factory statement cache size",
+								"Factory datasource helper classname", "URL",
+								"Database name", "Driver type", "Server name",
+								"Port number", "Connection pool id",
+								"Connection timeout", "Max connections",
+								"Min connections", "Reap time",
+								"Unused timeout", "Aged timeout",
+								"Purge policy",
+								"Number of shared pool partitions",
+								"Number of unshared pool partitions",
+								"Number of free pool partitions",
+								"Free pool distribution table size",
+								"Surge threshold", "Surge creation interval",
+								"Test connection", "Test connection interval",
+								"Stuck timer time", "Stuck time",
+								"Stuck threshold");
 			}
 
 			// For each profile
@@ -259,14 +294,16 @@ public class Main {
 
 				// Get the profile
 				Profile profile = was.getProfiles().get(profileIndex);
-
+				
+				String profileName = profile.getName();
+				
 				// New instance of ResourcesXmlParser class
 				resourcesXml = new ResourcesXmlParser();
 
 				/*
 				 * Cell scope
 				 */
-
+				
 				// Get Cell from profile
 				Cell cell = profile.getCell();
 
@@ -283,7 +320,7 @@ public class Main {
 				cell.setResources(resources);
 
 				// Print the resources data list
-				cell.printResourcesData(profile.getName(), outputFormat);
+				cell.printResourcesData(profileName, outputFormat);
 
 				/*
 				 * Node scope
@@ -305,7 +342,7 @@ public class Main {
 				node.setResources(resources);
 
 				// Print the resources data list
-				node.printResourcesData(profile.getName(), outputFormat);
+				node.printResourcesData(profileName, outputFormat);
 
 				/*
 				 * Cluster scope
@@ -339,7 +376,7 @@ public class Main {
 					cluster.setResources(resources);
 
 					// Print the resources data list
-					cluster.printResourcesData(profile.getName(), outputFormat);
+					cluster.printResourcesData(profileName, outputFormat);
 
 					++clustersIndex;
 				}
