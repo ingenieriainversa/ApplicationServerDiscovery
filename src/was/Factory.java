@@ -1,5 +1,5 @@
 /*
- * Application Server Discovery v0.01
+ * Application Server Discovery v0.03
  * Factory.java
  * Copyleft - 2016  Javier Dominguez Gomez
  * Written by Javier Dominguez Gomez <jdg@member.fsf.org>
@@ -23,7 +23,7 @@
 package was;
 
 public class Factory {
-
+	
 	private String type;
 	private String id;
 	private String name;
@@ -126,7 +126,7 @@ public class Factory {
 		setConnectionPoolStuckTime(connectionPoolStuckTime);
 		setConnectionPoolStuckThreshold(connectionPoolStuckThreshold);
 	}
-
+	
 	public String getType() {
 		return type;
 	}
@@ -445,10 +445,10 @@ public class Factory {
 			String connectionPoolStuckThreshold) {
 		this.connectionPoolStuckThreshold = connectionPoolStuckThreshold;
 	}
-
+	
 	public String toString() {
-		return type + ";" + id + ";" + name + ";" + jndiName + ";"
-				+ description + ";" + providerType + ";"
+		return type + ";" + id + ";" + name + ";" + jndiName
+				+ ";" + description + ";" + providerType + ";"
 				+ authMechanismPreference + ";" + authDataAlias + ";"
 				+ manageCachedHandles + ";" + logMissingTransactionContext
 				+ ";" + diagnoseConnectionUsage + ";"

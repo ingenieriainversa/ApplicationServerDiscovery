@@ -1,5 +1,5 @@
 /*
- * Application Server Discovery v0.01
+ * Application Server Discovery v0.03
  * JDBCProvider.java
  * Copyleft - 2016  Javier Dominguez Gomez
  * Written by Javier Dominguez Gomez <jdg@member.fsf.org>
@@ -22,10 +22,13 @@
 
 package was;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class JDBCProvider extends Resource {
-
+	
+	private String hostname;
 	private String description;
 	private String providerType;
 	private String isolatedClassLoader;
@@ -55,8 +58,9 @@ public class JDBCProvider extends Resource {
 			String providerType, String isolatedClassLoader,
 			String implementationClassName, String xa,
 			ArrayList<String> classpaths, ArrayList<String> nativeptahs,
-			ArrayList<Factory> factories) {
+			ArrayList<Factory> factories) throws UnknownHostException {
 		super(id, name);
+		setHostname();
 		setDescription(description);
 		setProviderType(providerType);
 		setIsolatedClassLoader(isolatedClassLoader);
@@ -67,6 +71,14 @@ public class JDBCProvider extends Resource {
 		setNativeptahs(nativeptahs);
 		setFactories(factories);
 		width = "%-26.26s";
+	}
+	
+	public String getHostname() {
+		return hostname;
+	}
+	
+	public void setHostname() throws UnknownHostException {
+		hostname = InetAddress.getLocalHost().getHostName();
 	}
 
 	public String getDescription() {
@@ -200,7 +212,7 @@ public class JDBCProvider extends Resource {
 
 			// For each Factory print data
 			if (outputFormat.equals("csv")) {
-				System.out.printf("%s;%s;%s;%s\n", profileName, scope,
+				System.out.printf("%s;%s;%s;%s;%s\n", hostname, profileName, scope,
 						toString(), factory.toString());
 			} else if (outputFormat.equals("table")) {
 				// if (index == 0) {

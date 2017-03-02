@@ -1,5 +1,5 @@
 /*
- * Application Server Discovery v0.01
+ * Application Server Discovery v0.03
  * Main.java
  * Copyleft - 2016  Javier Dominguez Gomez
  * Written by Javier Dominguez Gomez <jdg@member.fsf.org>
@@ -46,6 +46,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.OptionGroup;
 
 public class Main {
+	private static String version;
 	private static Was was;
 	private static WasProductParser wasProduct;
 	private static WasProduct wasProductData;
@@ -63,7 +64,10 @@ public class Main {
 	private static CommandLine cmdLine;
 
 	public static void main(String[] args) {
-
+		
+		// Software ful version
+		version = "0.03";
+		
 		// Set required options to null
 		mode = null;
 		path = null;
@@ -84,6 +88,9 @@ public class Main {
 		// All options: name, alias, required and help text
 		Option opt_h = Option.builder("h").longOpt("help")
 				.desc("Print this help.").build();
+
+		Option opt_v = Option.builder("v").longOpt("version")
+				.desc("Print software full version.").build();
 
 		Option opt_path = Option
 				.builder("path")
@@ -118,6 +125,7 @@ public class Main {
 
 		// Add options to options object in order
 		options.addOption(opt_h);
+		options.addOption(opt_v);
 		options.addOption(opt_path);
 		options.addOption(opt_mode);
 
@@ -138,6 +146,12 @@ public class Main {
 			// Option -h or --help
 			if (cmdLine.hasOption("h")) {
 				formatter.printHelp(Main.class.getCanonicalName(), options);
+				return;
+			}
+
+			// Option -v or --version
+			if (cmdLine.hasOption("v")) {
+				System.out.printf("v%s\n", version);
 				return;
 			}
 
@@ -254,9 +268,9 @@ public class Main {
 			// Print this header only if -csv option exist
 			if (cmdLine.hasOption("csv")) {
 				System.out
-						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-								"Profile", "Scope", "JDBC Provider id",
-								"JDBC Provider name",
+						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+								"Hostname", "Profile", "Scope",
+								"JDBC Provider id", "JDBC Provider name",
 								"JDBC Provider description",
 								"JDBC Provider type",
 								"JDBC Provider isolated class loader",
@@ -294,16 +308,16 @@ public class Main {
 
 				// Get the profile
 				Profile profile = was.getProfiles().get(profileIndex);
-				
+
 				String profileName = profile.getName();
-				
+
 				// New instance of ResourcesXmlParser class
 				resourcesXml = new ResourcesXmlParser();
 
 				/*
 				 * Cell scope
 				 */
-				
+
 				// Get Cell from profile
 				Cell cell = profile.getCell();
 
@@ -394,7 +408,8 @@ public class Main {
 					// Get the Jvm from ArrayList
 					Jvm jvm = jvms.get(jvmsIndex);
 
-					if (!jvm.getName().equals("nodeagent")) {
+					if (!jvm.getType().equals("NODE_AGENT")
+							&& !jvm.getType().equals("WEB_SERVER")) {
 						// Get the jvm resources.xml absolute path
 						String jvmResourcesXmlFile = jvm.getResourcesXml();
 

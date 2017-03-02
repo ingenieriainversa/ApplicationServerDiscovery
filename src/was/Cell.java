@@ -1,5 +1,5 @@
 /*
- * Application Server Discovery v0.01
+ * Application Server Discovery v0.03
  * Cell.java
  * Copyleft - 2016  Javier Dominguez Gomez
  * Written by Javier Dominguez Gomez <jdg@member.fsf.org>

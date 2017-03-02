@@ -1,4 +1,4 @@
-/* Application Server Discovery v0.01
+/* Application Server Discovery v0.03
  * ServerXmlParser.java
  * Copyleft - 2016  Javier Dominguez Gomez
  * Written by Javier Dominguez Gomez <jdg@member.fsf.org>
