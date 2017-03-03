@@ -64,10 +64,10 @@ public class Main {
 	private static CommandLine cmdLine;
 
 	public static void main(String[] args) {
-		
+
 		// Software ful version
 		version = "0.03";
-		
+
 		// Set required options to null
 		mode = null;
 		path = null;
@@ -219,10 +219,11 @@ public class Main {
 		} else if (mode.equals("jvmList")) {
 
 			// Print this header only if -csv option exist
-			if (cmdLine.hasOption("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Server name",
-						"Server type", "Hostname", "Profile", "Cell", "Node",
-						"Apps count", "Cluster name");
+			if (outputFormat.equals("csv")) {
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s\n", "Hostname",
+						"Server name", "Server type", "Profile", "Cell",
+						"Node", "Apps count", "Member of cluster",
+						"Cluster name");
 			}
 
 			// For each profile
@@ -243,10 +244,17 @@ public class Main {
 
 		} else if (mode.equals("endPointList")) {
 			// Print this header only if -csv option exist
-			if (cmdLine.hasOption("csv")) {
+			if (outputFormat.equals("csv")) {
 				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server",
 						"Server type", "Endpoint name", "Endpoint hostname",
 						"Port");
+			} else if (outputFormat.equals("table")) {
+				line(124);
+				System.out
+						.printf("| %-11.11s %-22.22s %-20.20s %-39.39s %-19.19s %-7.7s |\n",
+								"Hostname", "Server", "Server type",
+								"Endpoint name", "Endpoint hostname", "Port");
+				line(124);
 			}
 
 			// For each profile
@@ -264,11 +272,18 @@ public class Main {
 
 				++profileIndex;
 			}
+			
+			if (outputFormat.equals("table")) {
+				line(124);
+			}
+
 		} else if (mode.equals("resourcesList")) {
 			// Print this header only if -csv option exist
-			if (cmdLine.hasOption("csv")) {
+			if (outputFormat.equals("csv")) {
 				System.out
-						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;"
+								+ "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s"
+								+ ";%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
 								"Hostname", "Profile", "Scope",
 								"JDBC Provider id", "JDBC Provider name",
 								"JDBC Provider description",
@@ -300,6 +315,8 @@ public class Main {
 								"Test connection", "Test connection interval",
 								"Stuck timer time", "Stuck time",
 								"Stuck threshold");
+			} else if (outputFormat.equals("table")) {
+				System.out.printf("INFO: Too much data to print in a table.\n\n");
 			}
 
 			// For each profile
@@ -449,5 +466,14 @@ public class Main {
 
 		// Set the jvm ArrayList
 		profile.setJvms(jvms);
+	}
+
+	public static void line(int width) {
+		// This method prints horizontal table lines
+		System.out.printf("+");
+		for (int i = 0; i <= width; i++) {
+			System.out.printf("-");
+		}
+		System.out.printf("+\n");
 	}
 }
