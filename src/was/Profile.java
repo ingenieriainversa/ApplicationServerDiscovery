@@ -163,15 +163,9 @@ public class Profile {
 					path, template, cell.getName(),
 					node.getName(), serverindex);
 		} else if (outputFormat.equals("table")) {
-			String width = "%-25.25s";
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
-					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
-					+ "%s\n" + width + "%s\n\n", "Name:", getName(),
-					"Is a reservation ticket:", isAReservationTicket,
-					"Default:", isDefault, "Path:", path,
-					"Template:", template, "Cell:", cell.getName(),
-					"Node:", node.getName(), "Serverindex:",
-					serverindex);
+			System.out.printf("| %-24.24s %-87.87s %-14.14s %-22.22s |\n", name,
+					path, cell.getName(),
+					node.getName());
 		}
 	}
 

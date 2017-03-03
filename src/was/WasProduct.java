@@ -93,15 +93,11 @@ public class WasProduct {
 
 	public void printWasData(String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s\n%s;%s;%s;%s;%s\n", "Name", "ID",
-					"Version", "Date", "Level", getName(), getId(),
-					getVersion(), getDate(), getLevel());
+			System.out.printf("%s;%s;%s;%s;%s\n", name, id,
+					version, date, level);
 		} else if (outputFormat.equals("table")) {
-			String width = "%-9.9s";
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
-					+ width + "%s\n" + width + "%s\n", "Name:", getName(),
-					"ID:", getId(), "Version:", getVersion(), "Date:",
-					getDate(), "Level:", getLevel());
+			System.out.printf("| %-53.53s %-7.7s %-10.10s %-10.10s %-13.13s |\n", name, id,
+					version, date, level);
 		}
 	}
 }

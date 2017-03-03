@@ -192,13 +192,9 @@ public class Jvm {
 					profile, cell.getName(), node.getName(),
 					countApps, memberOfCluster, clusterName);
 		} else if (outputFormat.equals("table")) {
-			String width = "%-13.13s";
-			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
-					+ width + "%s\n" + width + "%s\n" + width + "%s\n" + width
-					+ "%d\n\n", "Server name:", name, "Server type:", type,
-					"Hostname:", name, "Profile:", profile, "Cell:",
-					cell.getName(), "Node:", node.getName(), "Apps count:",
-					countApps);
+			System.out.printf("| %-11.11s %-22.22s %-20.20s %-25.25s %-17.17s %-24.24s %-12.12s %-19.19s %-17.17s |\n", hostName, name, type,
+					profile, cell.getName(), node.getName(),
+					countApps, memberOfCluster, clusterName);
 		}
 	}
 

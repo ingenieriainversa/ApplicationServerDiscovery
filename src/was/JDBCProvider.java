@@ -215,12 +215,8 @@ public class JDBCProvider extends Resource {
 				System.out.printf("%s;%s;%s;%s;%s\n", hostname, profileName, scope,
 						toString(), factory.toString());
 			} else if (outputFormat.equals("table")) {
-				// if (index == 0) {
-				// System.out.printf(width + "%s\n", "Factory:",
-				// factory.getName());
-				// } else {
-				// System.out.printf(width + "%s\n", "", factory.getName());
-				// }
+				System.out.printf("%s;%s;%s;%s;%s\n", hostname, profileName, scope,
+						toString(), factory.toString());
 			}
 			++index;
 		}
@@ -232,16 +228,7 @@ public class JDBCProvider extends Resource {
 		if (outputFormat.equals("csv")) {
 			printResourceFactoriesData(profileName, scope, outputFormat);
 		} else if (outputFormat.equals("table")) {
-			// System.out.printf(width + "%s\n" + width + "%s\n" + width +
-			// "%s\n"
-			// + width + "%s\n" + width + "%s\n" + width + "%s\n",
-			// "Id:", getId(), "Name:", getName(), "Description:",
-			// getDescription(), "Provider type:", getProviderType(),
-			// "Implementation Class Name", getImplementationClassName(),
-			// "XA:", getXa());
-			// printResourceClassPathData(outputFormat);
-			// printResourceNativePathData(outputFormat);
-			// printResourceFactoriesData(outputFormat);
+			printResourceFactoriesData(profileName, scope, outputFormat);
 		}
 	}
 

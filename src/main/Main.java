@@ -86,20 +86,16 @@ public class Main {
 		formatter.setOptionComparator(null);
 
 		// All options: name, alias, required and help text
-		Option opt_h = Option.builder("h").longOpt("help")
-				.desc("Print this help.").build();
+		Option opt_h = Option.builder("h").longOpt("help").desc("Print this help.").build();
 
-		Option opt_v = Option.builder("v").longOpt("version")
-				.desc("Print software full version.").build();
+		Option opt_v = Option.builder("v").longOpt("version").desc("Print software full version.").build();
 
-		Option opt_path = Option
-				.builder("path")
+		Option opt_path = Option.builder("path")
 				.desc("This parameter is required. Use it to specify WAS, JBoss or WebLogic "
 						+ "installation path. For example:\n</opt/IBM/WebSphere/AppServer>")
 				.required().hasArg().argName("install_home").build();
 
-		Option opt_mode = Option
-				.builder("mode")
+		Option opt_mode = Option.builder("mode")
 				.desc("This parameter is required. Use it to specify the information to be printed. "
 						+ "These are the arguments available for this option:\n"
 						+ "<productData>    Print all product data.\n"
@@ -109,13 +105,9 @@ public class Main {
 						+ "<resourcesList>  Print a resources list and data.")
 				.required().hasArg().argName("argument").build();
 
-		Option opt_csv = Option
-				.builder("csv")
-				.desc("This parameter is optional. Print output in CSV format.")
-				.build();
+		Option opt_csv = Option.builder("csv").desc("This parameter is optional. Print output in CSV format.").build();
 
-		Option opt_table = Option
-				.builder("table")
+		Option opt_table = Option.builder("table")
 				.desc("This parameter is optional and set by default if you don't specify the "
 						+ "ouput format. Print output in table format.")
 				.build();
@@ -158,15 +150,13 @@ public class Main {
 			// Option -path
 			path = cmdLine.getOptionValue("path");
 			if (path == null) {
-				throw new org.apache.commons.cli.ParseException(
-						"path option is required.");
+				throw new org.apache.commons.cli.ParseException("path option is required.");
 			}
 
 			// Option -mode
 			mode = cmdLine.getOptionValue("mode");
 			if (mode == null) {
-				throw new org.apache.commons.cli.ParseException(
-						"mode option is required.");
+				throw new org.apache.commons.cli.ParseException("mode option is required.");
 			}
 
 			// Options -csv and -table for output format
@@ -207,23 +197,73 @@ public class Main {
 		was = new Was(wasProductData, profiles);
 
 		if (mode.equals("productData")) {
-
+			
+			// Print this header only if outputFormat is csv
+			if (outputFormat.equals("csv")) {
+				System.out.printf("%s;%s;%s;%s;%s\n", "Name", "ID",
+						"Version", "Date", "Level");
+			} else if (outputFormat.equals("table")) {
+				// Print the horizontal line of the table
+				line(98);
+				
+				System.out.printf("| %-53.53s %-7.7s %-10.10s %-10.10s %-13.13s |\n", "Name", "ID",
+						"Version", "Date", "Level");
+				
+				// Print the horizontal line of the table
+				line(98);
+			}
+			
 			// Print all product data
 			was.printWasProductData(outputFormat);
+			
+			if (outputFormat.equals("table")) {
+				// Print the bottom horizontal line of the table
+				line(98);
+			}
 
 		} else if (mode.equals("profileList")) {
+
+			// Print this header only if outputFormat is csv
+			if (outputFormat.equals("csv")) {
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", "Profile name", "Is a reservation ticket", "Default",
+						"Path", "Template", "Cell", "Node", "Serverindex");
+			} else if (outputFormat.equals("table")) {
+				// Print the horizontal line of the table
+				line(151);
+
+				System.out.printf("| %-24.24s %-87.87s %-14.14s %-22.22s |\n", "Profile name", "Path", "Cell",
+						"Node");
+
+				// Print the horizontal line of the table
+				line(151);
+			}
 
 			// Print a profile list
 			was.printProfileList(outputFormat);
 
+			if (outputFormat.equals("table")) {
+				// Print the bottom horizontal line of the table
+				line(151);
+			}
+
 		} else if (mode.equals("jvmList")) {
 
-			// Print this header only if -csv option exist
+			// Print this header only if outputFormat is csv
 			if (outputFormat.equals("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s\n", "Hostname",
-						"Server name", "Server type", "Profile", "Cell",
-						"Node", "Apps count", "Member of cluster",
-						"Cluster name");
+				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s\n", "Hostname", "Server name", "Server type", "Profile",
+						"Cell", "Node", "Apps count", "Member of cluster", "Cluster name");
+			} else if (outputFormat.equals("table")) {
+				// Print the horizontal line of the table
+				line(176);
+
+				// Print this header only if outputFormat is table
+				System.out.printf(
+						"| %-11.11s %-22.22s %-20.20s %-25.25s %-17.17s %-24.24s %-12.12s %-19.19s %-17.17s |\n",
+						"Hostname", "Server name", "Server type", "Profile", "Cell", "Node", "Apps count",
+						"Member of cluster", "Cluster name");
+
+				// Print the horizontal line of the table
+				line(176);
 			}
 
 			// For each profile
@@ -242,18 +282,24 @@ public class Main {
 				++profileIndex;
 			}
 
+			if (outputFormat.equals("table")) {
+				// Print the bottom horizontal line of the table
+				line(176);
+			}
+
 		} else if (mode.equals("endPointList")) {
-			// Print this header only if -csv option exist
+			// Print this header only if outputFormat is csv
 			if (outputFormat.equals("csv")) {
-				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server",
-						"Server type", "Endpoint name", "Endpoint hostname",
-						"Port");
+				System.out.printf("%s;%s;%s;%s;%s;%s\n", "Hostname", "Server", "Server type", "Endpoint name",
+						"Endpoint hostname", "Port");
 			} else if (outputFormat.equals("table")) {
+				// Print the horizontal line of the table
 				line(124);
-				System.out
-						.printf("| %-11.11s %-22.22s %-20.20s %-39.39s %-19.19s %-7.7s |\n",
-								"Hostname", "Server", "Server type",
-								"Endpoint name", "Endpoint hostname", "Port");
+
+				// Print this header only if outputFormat is table
+				System.out.printf("| %-11.11s %-22.22s %-20.20s %-39.39s %-19.19s %-7.7s |\n", "Hostname", "Server",
+						"Server type", "Endpoint name", "Endpoint hostname", "Port");
+				// Print the horizontal line of the table
 				line(124);
 			}
 
@@ -272,51 +318,43 @@ public class Main {
 
 				++profileIndex;
 			}
-			
+
 			if (outputFormat.equals("table")) {
+				// Print the bottom horizontal line of the table
 				line(124);
 			}
 
 		} else if (mode.equals("resourcesList")) {
-			// Print this header only if -csv option exist
-			if (outputFormat.equals("csv")) {
-				System.out
-						.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;"
+
+			// Print this INFO message if outputFormat is "table".
+			if (outputFormat.equals("table")) {
+				System.out.printf("INFO: Mode \"%s\" contains too much data to print in a table. "
+						+ "The data will also be printed in csv format.\n\n", mode);
+			}
+
+			/*
+			 * In this case (resourcesList mode), print this header in any
+			 * outputFormat case (csv or table).
+			 */
+			if (outputFormat.equals("csv") || outputFormat.equals("table")) {
+				System.out.printf(
+						"%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;"
 								+ "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s"
 								+ ";%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-								"Hostname", "Profile", "Scope",
-								"JDBC Provider id", "JDBC Provider name",
-								"JDBC Provider description",
-								"JDBC Provider type",
-								"JDBC Provider isolated class loader",
-								"JDBC Provider implementation class name",
-								"XA", "Factory type", "Factory id",
-								"Factory name", "Factory JNDI Name",
-								"Factory Description", "Factory Provider type",
-								"Factory auth mechanism preference",
-								"Factory auth data alias",
-								"Factory manage cached handles",
-								"Factory log missing transaction context",
-								"Factory diagnose connection usage",
-								"Factory relational resource adapter",
-								"Factory statement cache size",
-								"Factory datasource helper classname", "URL",
-								"Database name", "Driver type", "Server name",
-								"Port number", "Connection pool id",
-								"Connection timeout", "Max connections",
-								"Min connections", "Reap time",
-								"Unused timeout", "Aged timeout",
-								"Purge policy",
-								"Number of shared pool partitions",
-								"Number of unshared pool partitions",
-								"Number of free pool partitions",
-								"Free pool distribution table size",
-								"Surge threshold", "Surge creation interval",
-								"Test connection", "Test connection interval",
-								"Stuck timer time", "Stuck time",
-								"Stuck threshold");
-			} else if (outputFormat.equals("table")) {
-				System.out.printf("INFO: Too much data to print in a table.\n\n");
+						"Hostname", "Profile", "Scope", "JDBC Provider id", "JDBC Provider name",
+						"JDBC Provider description", "JDBC Provider type", "JDBC Provider isolated class loader",
+						"JDBC Provider implementation class name", "XA", "Factory type", "Factory id", "Factory name",
+						"Factory JNDI Name", "Factory Description", "Factory Provider type",
+						"Factory auth mechanism preference", "Factory auth data alias", "Factory manage cached handles",
+						"Factory log missing transaction context", "Factory diagnose connection usage",
+						"Factory relational resource adapter", "Factory statement cache size",
+						"Factory datasource helper classname", "URL", "Database name", "Driver type", "Server name",
+						"Port number", "Connection pool id", "Connection timeout", "Max connections", "Min connections",
+						"Reap time", "Unused timeout", "Aged timeout", "Purge policy",
+						"Number of shared pool partitions", "Number of unshared pool partitions",
+						"Number of free pool partitions", "Free pool distribution table size", "Surge threshold",
+						"Surge creation interval", "Test connection", "Test connection interval", "Stuck timer time",
+						"Stuck time", "Stuck threshold");
 			}
 
 			// For each profile
@@ -425,8 +463,7 @@ public class Main {
 					// Get the Jvm from ArrayList
 					Jvm jvm = jvms.get(jvmsIndex);
 
-					if (!jvm.getType().equals("NODE_AGENT")
-							&& !jvm.getType().equals("WEB_SERVER")) {
+					if (!jvm.getType().equals("NODE_AGENT") && !jvm.getType().equals("WEB_SERVER")) {
 						// Get the jvm resources.xml absolute path
 						String jvmResourcesXmlFile = jvm.getResourcesXml();
 
