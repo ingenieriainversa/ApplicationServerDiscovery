@@ -23,31 +23,31 @@
 package was;
 
 public class EndPoint {
-	private String endPointName;
+	private String name;
 	private String host;
 	private String port;
 
 	/*
 	 * EndPoint class constructor:
 	 * 
-	 * @endPointName: EndPoint name.
+	 * @name: EndPoint name.
 	 * 
 	 * @host: EndPoint host.
 	 * 
 	 * @port: EndPoint port.
 	 */
-	public EndPoint(String endPointName, String host, String port) {
-		setEndPointName(endPointName);
+	public EndPoint(String name, String host, String port) {
+		setName(name);
 		setHost(host);
 		setPort(port);
 	}
 
-	public String getEndPointName() {
-		return endPointName;
+	public String getName() {
+		return name;
 	}
 
-	public void setEndPointName(String endPointName) {
-		this.endPointName = endPointName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getHost() {
@@ -66,7 +66,13 @@ public class EndPoint {
 		this.port = port;
 	}
 
-	public String printData() {
-		return getEndPointName() + ";" + getHost() + ";" + getPort();
+	public String printData(String outputFormat) {
+		String out = null;
+		if (outputFormat.equals("csv")) {
+			out = name + ";" + host + ";" + port;
+		} else if (outputFormat.equals("table")) {
+			out = String.format("%-39.39s %-19.19s %-7.7s |", name, host, port);
+		}
+		return out;
 	}
 }
