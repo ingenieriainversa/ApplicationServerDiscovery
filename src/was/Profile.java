@@ -214,14 +214,14 @@ public class Profile {
 	}
 
 	// Prints a Jvm apps list
-	public void printJvmAppList() {
+	public void printJvmAppList(String outputFormat) {
 		// Jvms array iteration
 		int index = 0;
 		while (index < jvms.size()) {
 			Jvm jvm = jvms.get(index);
 
 			// For each Jvm print data
-			jvm.printAppsData();
+			jvm.printAppsData(outputFormat);
 
 			++index;
 		}
