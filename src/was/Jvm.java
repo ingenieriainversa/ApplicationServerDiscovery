@@ -184,13 +184,13 @@ public class Jvm {
 	public void setEndPoints(ArrayList<EndPoint> endPoints) {
 		this.endPoints = endPoints;
 	}
-
+	
 	public void printJvmData(String profile, Cell cell, Node node,
 			String outputFormat) {
 		if (outputFormat.equals("csv")) {
-			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s\n", name, type,
-					hostName, profile, cell.getName(), node.getName(),
-					countApps, clusterName);
+			System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s\n", hostName, name, type,
+					profile, cell.getName(), node.getName(),
+					countApps, memberOfCluster, clusterName);
 		} else if (outputFormat.equals("table")) {
 			String width = "%-13.13s";
 			System.out.printf(width + "%s\n" + width + "%s\n" + width + "%s\n"
@@ -211,7 +211,7 @@ public class Jvm {
 		} else if (outputFormat.equals("table")) {
 
 			// Fix this!
-			System.out.printf("%s;%s;%s;%s\n", hostName, name, type,
+			System.out.printf("| %-11.11s %-22.22s %-20.20s %s\n", hostName, name, type,
 					endPointData);
 		}
 	}
@@ -227,18 +227,18 @@ public class Jvm {
 			if (endPointName.equals("all")) {
 
 				// Print jvm data without filter
-				endPointData(endPoint.printData(), outputFormat);
+				endPointData(endPoint.printData(outputFormat), outputFormat);
 
-			} else if (endPoint.getEndPointName().equals(endPointName)) {
+			} else if (endPoint.getName().equals(endPointName)) {
 
 				// Print jvm data filtered by endPointName
-				endPointData(endPoint.printData(), outputFormat);
+				endPointData(endPoint.printData(outputFormat), outputFormat);
 			}
 			++index;
 		}
 	}
 
-	public void printAppsData() {
+	public void printAppsData(String outputFormat) {
 		// Apps array iteration
 		int appIndex = 0;
 		while (appIndex < getApps().size()) {
@@ -251,7 +251,7 @@ public class Jvm {
 
 				// Print jvm data
 				System.out.printf("%s;%s;%s;%s;%s\n", hostName, name, type,
-						endPoint.printData(), app.getName());
+						endPoint.printData(outputFormat), app.getName());
 				++endPointIndex;
 			}
 			++appIndex;
