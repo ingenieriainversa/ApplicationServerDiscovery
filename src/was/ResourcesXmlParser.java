@@ -239,70 +239,92 @@ public class ResourcesXmlParser {
 									String factoryStuckTimerTime = "N/A";
 									String factoryStuckTime = "N/A";
 									String factoryStuckThreshold = "N/A";
+									String factoryType = "N/A";
+									String factoryId = "N/A";
+									String factoryName = "N/A";
+									String factoryJndiName = "N/A";
+									String factoryDescription = "N/A";
+									String factoryAuthMechanismPreference = "N/A";
+									String factoryRelationalResourceAdapter = "N/A";
+									String factoryStatementCacheSize = "N/A";
+									String factoryDatasourceHelperClassname = "N/A";
 
-									// Get xmi:type attribute from factories
-									// node
-									String factoryType = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("xmi:type")
-											.getTextContent();
+									for (int i = 0; i < resourcesChildNodeAttrs
+											.getLength(); i++) {
+										Attr attribute = (Attr) resourcesChildNodeAttrs
+												.item(i);
 
-									// Get xmi:id attribute from factories node
-									String factoryId = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("xmi:id")
-											.getTextContent();
+										// Get xmi:type attribute from factories
+										// node
+										if (attribute.getName().equals(
+												"xmi:type")) {
+											factoryType = attribute.getValue();
+										}
 
-									// Get name attribute from factories node
-									String factoryName = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("name")
-											.getTextContent();
+										// Get xmi:id attribute from factories
+										// node
+										if (attribute.getName()
+												.equals("xmi:id")) {
+											factoryId = attribute.getValue();
+										}
 
-									// Get jndiName attribute from factories
-									// node
-									String factoryJndiName = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("jndiName")
-											.getTextContent();
+										// Get name attribute from factories
+										// node
+										if (attribute.getName().equals("name")) {
+											factoryName = attribute.getValue();
+										}
 
-									// Get description attribute from factories
-									// node
-									String factoryDescription = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("description")
-											.getTextContent();
+										// Get jndiName attribute from factories
+										// node
+										if (attribute.getName().equals(
+												"jndiName")) {
+											factoryJndiName = attribute
+													.getValue();
+										}
 
-									// Get authMechanismPreference attribute
-									// from factories node
-									String factoryAuthMechanismPreference = resourcesChildNode
-											.getAttributes()
-											.getNamedItem(
-													"authMechanismPreference")
-											.getTextContent();
+										// Get description attribute from
+										// factories
+										// node
+										if (attribute.getName().equals(
+												"description")) {
+											factoryDescription = attribute
+													.getValue();
+										}
 
-									// Get relationalResourceAdapter attribute
-									// from factories node
-									String factoryRelationalResourceAdapter = resourcesChildNode
-											.getAttributes()
-											.getNamedItem(
-													"relationalResourceAdapter")
-											.getTextContent();
+										// Get authMechanismPreference attribute
+										// from factories node
+										if (attribute.getName().equals(
+												"authMechanismPreference")) {
+											factoryAuthMechanismPreference = attribute
+													.getValue();
+										}
 
-									// Get statementCacheSize attribute from
-									// factories node
-									String factoryStatementCacheSize = resourcesChildNode
-											.getAttributes()
-											.getNamedItem("statementCacheSize")
-											.getTextContent();
+										// Get relationalResourceAdapter
+										// attribute
+										// from factories node
+										if (attribute.getName().equals(
+												"relationalResourceAdapter")) {
+											factoryRelationalResourceAdapter = attribute
+													.getValue();
+										}
 
-									// Get datasourceHelperClassname attribute
-									// from factories node
-									String factoryDatasourceHelperClassname = resourcesChildNode
-											.getAttributes()
-											.getNamedItem(
-													"datasourceHelperClassname")
-											.getTextContent();
+										// Get statementCacheSize attribute from
+										// factories node
+										if (attribute.getName().equals(
+												"statementCacheSize")) {
+											factoryStatementCacheSize = attribute
+													.getValue();
+										}
+
+										// Get datasourceHelperClassname
+										// attribute
+										// from factories node
+										if (attribute.getName().equals(
+												"datasourceHelperClassname")) {
+											factoryDatasourceHelperClassname = attribute
+													.getValue();
+										}
+									}
 
 									// factories children nodes iteration
 									NodeList factoriesChildrenNodes = resourcesChildNode
@@ -417,146 +439,186 @@ public class ResourcesXmlParser {
 														factoryConnectionPoolId = attribute
 																.getValue();
 													}
-													
-													// Get connectionTimeout attribute from
+
+													// Get connectionTimeout
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("connectionTimeout")) {
 														factoryConnectionTimeout = attribute
 																.getValue();
 													}
-													
-													// Get maxConnections attribute from
+
+													// Get maxConnections
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("maxConnections")) {
 														factoryMaxConnections = attribute
 																.getValue();
 													}
-													
-													// Get minConnections attribute from
+
+													// Get minConnections
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("minConnections")) {
 														factoryMinConnections = attribute
 																.getValue();
 													}
-													
-													// Get reapTime attribute from
+
+													// Get reapTime attribute
+													// from
 													// connectionPool node
 													if (attribute.getName()
 															.equals("reapTime")) {
 														factoryReapTime = attribute
 																.getValue();
 													}
-													
-													// Get unusedTimeout attribute from
+
+													// Get unusedTimeout
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("unusedTimeout")) {
 														factoryUnusedTimeout = attribute
 																.getValue();
 													}
-													
-													// Get agedTimeout attribute from
+
+													// Get agedTimeout attribute
+													// from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("agedTimeout")) {
 														factoryAgedTimeout = attribute
 																.getValue();
 													}
-													
-													// Get purgePolicy attribute from
+
+													// Get purgePolicy attribute
+													// from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("purgePolicy")) {
 														factoryPurgePolicy = attribute
 																.getValue();
 													}
-													
-													// Get numberOfSharedPoolPartitions attribute from
+
+													// Get
+													// numberOfSharedPoolPartitions
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("numberOfSharedPoolPartitions")) {
 														factoryNumberOfSharedPoolPartitions = attribute
 																.getValue();
 													}
-													
-													// Get numberOfUnsharedPoolPartitions attribute from
+
+													// Get
+													// numberOfUnsharedPoolPartitions
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("numberOfUnsharedPoolPartitions")) {
 														factoryNumberOfUnsharedPoolPartitions = attribute
 																.getValue();
 													}
-													
-													// Get numberOfFreePoolPartitions attribute from
+
+													// Get
+													// numberOfFreePoolPartitions
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("numberOfFreePoolPartitions")) {
 														factoryNumberOfFreePoolPartitions = attribute
 																.getValue();
 													}
-													
-													// Get freePoolDistributionTableSize attribute from
+
+													// Get
+													// freePoolDistributionTableSize
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("freePoolDistributionTableSize")) {
 														factoryFreePoolDistributionTableSize = attribute
 																.getValue();
 													}
-													
-													// Get surgeThreshold attribute from
+
+													// Get surgeThreshold
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("surgeThreshold")) {
 														factorySurgeThreshold = attribute
 																.getValue();
 													}
-													
-													// Get surgeCreationInterval attribute from
+
+													// Get surgeCreationInterval
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("surgeCreationInterval")) {
 														factorySurgeCreationInterval = attribute
 																.getValue();
 													}
-													
-													// Get testConnection attribute from
+
+													// Get testConnection
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("testConnection")) {
 														factoryTestConnection = attribute
 																.getValue();
 													}
-													
-													// Get testConnectionInterval attribute from
+
+													// Get
+													// testConnectionInterval
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("testConnectionInterval")) {
 														factoryTestConnectionInterval = attribute
 																.getValue();
 													}
-													
-													// Get stuckTimerTime attribute from
+
+													// Get stuckTimerTime
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("stuckTimerTime")) {
 														factoryStuckTimerTime = attribute
 																.getValue();
 													}
-													
-													// Get stuckTime attribute from
+
+													// Get stuckTime attribute
+													// from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("stuckTime")) {
 														factoryStuckTime = attribute
 																.getValue();
 													}
-													
-													// Get stuckThreshold attribute from
+
+													// Get stuckThreshold
+													// attribute from
 													// connectionPool node
-													if (attribute.getName()
+													if (attribute
+															.getName()
 															.equals("stuckThreshold")) {
 														factoryStuckThreshold = attribute
 																.getValue();
@@ -589,7 +651,8 @@ public class ResourcesXmlParser {
 													factoryPropertyDriverType,
 													factoryPropertyServerName,
 													factoryPropertyPortNumber,
-													factoryConnectionPoolId,factoryConnectionTimeout,
+													factoryConnectionPoolId,
+													factoryConnectionTimeout,
 													factoryMaxConnections,
 													factoryMinConnections,
 													factoryReapTime,
