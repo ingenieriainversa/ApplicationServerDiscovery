@@ -251,19 +251,19 @@ public class Main {
 			// Print this header only if outputFormat is csv
 			if (outputFormat.equals("csv")) {
 				System.out.printf("%s;%s;%s;%s;%s;%s;%s;%s;%s\n", "Hostname", "Server name", "Server type", "Profile",
-						"Cell", "Node", "Apps count", "Member of cluster", "Cluster name");
+						"Cell", "Node", "Apps count", "Cluster", "Cluster name");
 			} else if (outputFormat.equals("table")) {
 				// Print the horizontal line of the table
-				line(176);
+				line(164);
 
 				// Print this header only if outputFormat is table
 				System.out.printf(
-						"| %-11.11s %-22.22s %-20.20s %-25.25s %-17.17s %-24.24s %-12.12s %-19.19s %-17.17s |\n",
+						"| %-11.11s %-22.22s %-20.20s %-25.25s %-17.17s %-24.24s %-12.12s %-7.7s %-17.17s |\n",
 						"Hostname", "Server name", "Server type", "Profile", "Cell", "Node", "Apps count",
-						"Member of cluster", "Cluster name");
+						"Cluster", "Cluster name");
 
 				// Print the horizontal line of the table
-				line(176);
+				line(164);
 			}
 
 			// For each profile
@@ -284,7 +284,7 @@ public class Main {
 
 			if (outputFormat.equals("table")) {
 				// Print the bottom horizontal line of the table
-				line(176);
+				line(164);
 			}
 
 		} else if (mode.equals("endPointList")) {
@@ -463,7 +463,7 @@ public class Main {
 					// Get the Jvm from ArrayList
 					Jvm jvm = jvms.get(jvmsIndex);
 
-					if (!jvm.getType().equals("NODE_AGENT") && !jvm.getType().equals("WEB_SERVER")) {
+					if (jvm.getType().equals("APPLICATION_SERVER")) {
 						// Get the jvm resources.xml absolute path
 						String jvmResourcesXmlFile = jvm.getResourcesXml();
 
