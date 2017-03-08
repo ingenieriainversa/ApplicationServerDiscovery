@@ -118,7 +118,11 @@ public class ResourcesXmlParser {
 						}
 					}
 
-					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")) {
+					if (resourcesNodeName.equals("resources.jdbc:JDBCProvider")
+							&& (!name.contains("Derby JDBC Provider")
+									&& !name.contains("OTiSDataSource")
+									&& !name.contains("Event_DB2_JDBC_Provider") && !name
+										.contains("Mashups DB2 Universal"))) {
 
 						// Get implementationClassName attribute from resources
 						// node
